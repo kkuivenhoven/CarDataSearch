@@ -1,0 +1,17 @@
+<%= form_with(model: coche_dato) do |form| %>
+  <% if coche_dato.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(coche_dato.errors.count, "error") %> prohibited this coche_dato from being saved:</h2>
+
+      <ul>
+        <% coche_dato.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

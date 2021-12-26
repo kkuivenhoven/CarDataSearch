@@ -1,0 +1,54 @@
+<h1>Elastic search for Coches</h1>
+
+<%= form_for :search_coche_datos, url: search_coche_datos_path, method: :get do |form| %>
+  <%= form.text_field :query, value: params[:search_coche_datos].presence && params[:search_coche_datos][:query] %>
+  <%= form.submit 'Search' %>
+<% end %>
+
+
+<% unless @coche_datos.nil? %>
+  <% if @coche_datos.empty? %>
+    <h2>No coches found matching your query.</h2>
+  <% else %>
+    <h2>Search results</h2>
+
+		<p>count: <%= @coche_datos.size %>
+
+    <table style="width: 100%;">
+      <thead>
+         <tr>
+           <th>#</th>
+           <th>Car</th>
+           <th>MPG</th>
+           <th>Cylinders</th>
+           <th>Displacement</th>
+           <th>Horsepower</th>
+           <th>Weight</th>
+           <th>Acceleration</th>
+           <th>Model</th>
+           <th>Origin</th>
+         </tr>
+      </thead>
+
+      <tbody>
+        <!--% @coche_datos.each do |coche| %-->
+        <% @coche_datos.each_with_index do |coche, index| %>
+          <tr>
+            <td><%= (index + 1) %></td>
+            <td><%= coche.car %></td>
+            <td><%= coche.mpg %></td>
+            <td><%= coche.cylinders %></td>
+            <td><%= coche.displacement %></td>
+            <td><%= coche.horsepower %></td>
+            <td><%= coche.weight %></td>
+            <td><%= coche.acceleration %></td>
+            <td><%= coche.model %></td>
+            <td><%= coche.origin %></td>
+            <td><%= link_to 'View', coche_dato_path(coche.id) %></td>
+          </tr>
+        <% end %>
+      <tbody>
+    </table>
+  <% end %>
+<% end %>
+
