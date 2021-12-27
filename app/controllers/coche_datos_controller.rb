@@ -3,13 +3,21 @@ class CocheDatosController < ApplicationController
 
 	def search
 		query = params[:search_coche_datos].presence && params[:search_coche_datos][:query]
+		mpg = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG]
+		mpg_checkbox = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_checkbox]
 		
 		if (query.nil? == false)
+			puts "----- mpg_check_box: #{mpg_checkbox}"
+			puts "----- mpg: #{mpg}"
 			puts "----- query: #{query}"
 			comma_count = query.count(',')
 			puts "count of commas: #{comma_count}"
-
-			@coche_datos = CocheDato.search_published(query)
+			
+			if(mpg_checkbox)
+				@coche_datos = CocheDato.search_car_mpg(query, mpg)
+			else
+				@coche_datos = CocheDato.search_published(query)
+			end
 		end
 	end
 

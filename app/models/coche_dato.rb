@@ -28,4 +28,27 @@ class CocheDato < ApplicationRecord
 		})
 	end
 
+	def self.search_car_mpg(query, mpg)
+		self.search({
+			size: 25,
+			query: {
+				bool: {
+					must: [
+					{
+						multi_match: {
+							query: query,
+							fields: [:car]
+						}
+					},
+					{
+						match: {
+							query: mpg,
+							fields: [:mpg]
+						}
+					}]
+				}
+			}
+		})
+	end
+
 end

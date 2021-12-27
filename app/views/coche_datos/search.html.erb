@@ -1,6 +1,13 @@
 <h1>Elastic search for Coches</h1>
 
+<% @types = ["abc","def","ghi"] %>
+
 <%= form_for :search_coche_datos, url: search_coche_datos_path, method: :get do |form| %>
+	<!--%= form.label :MPG %-->
+	Specify MPG?
+	<%= form.check_box :MPG_checkbox, class: "form-control", placeholder: "Specify MPG?" %><br>
+	<%= form.number_field :MPG, min: 1, max: 40, :step => 'any', class: "number", placeholder: "0" %><br>
+
   <%= form.text_field :query, value: params[:search_coche_datos].presence && params[:search_coche_datos][:query] %>
   <%= form.submit 'Search' %>
 <% end %>

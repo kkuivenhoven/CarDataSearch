@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_20_025147) do
+ActiveRecord::Schema.define(version: 2021_12_27_042128) do
 
   create_table "coche_datos", force: :cascade do |t|
     t.string "car"
-    t.float "mpg"
+    t.decimal "mpg", precision: 2, scale: 2, null: false
     t.integer "cylinders"
     t.float "displacement"
     t.float "horsepower"
