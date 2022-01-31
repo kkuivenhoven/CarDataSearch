@@ -2,22 +2,33 @@ class CocheDatosController < ApplicationController
   before_action :set_coche_dato, only: %i[ show edit update destroy ]
 
 	def search
-		query = params[:search_coche_datos].presence && params[:search_coche_datos][:query]
-		mpg = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG]
-		mpg_checkbox = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_checkbox]
-		
-		if (query.nil? == false)
-			puts "----- mpg_check_box: #{mpg_checkbox}"
-			puts "----- mpg: #{mpg}"
-			puts "----- query: #{query}"
-			comma_count = query.count(',')
-			puts "count of commas: #{comma_count}"
+		if (params[:search_coche_datos].nil? == false)
+			query = params[:search_coche_datos].presence && params[:search_coche_datos][:query]
+			# @coche_datos = CocheDato.search_published(query)
+			mpg = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG]
+			mpg_checkbox = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_checkbox]
 			
-			if(mpg_checkbox)
-				@coche_datos = CocheDato.search_car_mpg(query, mpg)
+			if (query.nil? == false)
+				puts "----- mpg_check_box: #{mpg_checkbox}"
+				puts "----- mpg: #{mpg}"
+				puts "----- query: #{query}"
+				comma_count = query.count(',')
+				puts "count of commas: #{comma_count}"
+				
+				if(mpg_checkbox == "1")
+					print "HELLO SEARCHING CAR MPG"
+					@coche_datos = CocheDato.search_car_mpg(query, mpg)
+				else
+					print " nOR SHOULDN'T BE HERE EITHER"
+					@coche_datos = CocheDato.search_published(query)
+				end
 			else
-				@coche_datos = CocheDato.search_published(query)
+				print "SHOULDN'T BE HERE"
+				@coche_datos = nil
 			end
+		else
+			print "SHOULDN'T BE HERE EITHER"
+			@coche_datos = nil
 		end
 	end
 

@@ -1,26 +1,31 @@
 <h1>Elastic search for Coches</h1>
 
-<% @types = ["abc","def","ghi"] %>
 
 <%= form_for :search_coche_datos, url: search_coche_datos_path, method: :get do |form| %>
 	<!--%= form.label :MPG %-->
-	Specify MPG?
+	<Specify MPG?
 	<%= form.check_box :MPG_checkbox, class: "form-control", placeholder: "Specify MPG?" %><br>
-	<%= form.number_field :MPG, min: 1, max: 40, :step => 'any', class: "number", placeholder: "0" %><br>
+	<%= form.number_field :MPG, min: 1, max: 200, :step => 'any', class: "number", placeholder: "0" %><br>
 
   <%= form.text_field :query, value: params[:search_coche_datos].presence && params[:search_coche_datos][:query] %>
   <%= form.submit 'Search' %>
 <% end %>
 
 
-<% unless @coche_datos.nil? %>
-  <% if @coche_datos.empty? %>
+<% if @coche_datos.nil? %>
     <h2>No coches found matching your query.</h2>
-  <% else %>
+<% else %>
     <h2>Search results</h2>
+<% end %>
 
-		<p>count: <%= @coche_datos.size %>
+		<!--<p>count: <= @coche_datos.size %>-->
 
+<% if @coche_datos.nil? %>
+	<h1><b>Coche Datos is null</b></h1>
+
+<% else %>
+
+	<h1>Coche Datos is not null</h1>
     <table style="width: 100%;">
       <thead>
          <tr>
@@ -37,25 +42,25 @@
          </tr>
       </thead>
 
-      <tbody>
-        <!--% @coche_datos.each do |coche| %-->
-        <% @coche_datos.each_with_index do |coche, index| %>
-          <tr>
-            <td><%= (index + 1) %></td>
-            <td><%= coche.car %></td>
-            <td><%= coche.mpg %></td>
-            <td><%= coche.cylinders %></td>
-            <td><%= coche.displacement %></td>
-            <td><%= coche.horsepower %></td>
-            <td><%= coche.weight %></td>
-            <td><%= coche.acceleration %></td>
-            <td><%= coche.model %></td>
-            <td><%= coche.origin %></td>
-            <td><%= link_to 'View', coche_dato_path(coche.id) %></td>
-          </tr>
-        <% end %>
-      <tbody>
-    </table>
-  <% end %>
+		<tbody>
+			<!-- @coche_datos.each do |coche| %-->
+			<% @coche_datos.each_with_index do |coche, index| %>
+				<tr>
+					<td><%= (index + 1) %></td>
+					<td><%= coche.car %></td>
+					<td><%= coche.mpg %></td>
+					<td><%= coche.cylinders %></td>
+					<td><%= coche.displacement %></td>
+					<td><%= coche.horsepower %></td>
+					<td><%= coche.weight %></td>
+					<td><%= coche.acceleration %></td>
+					<td><%= coche.model %></td>
+					<td><%= coche.origin %></td>
+					<td><%= link_to 'View', coche_dato_path(coche.id) %></td>
+				</tr>
+			<% end %>
+			<tbody>
+		</table>
+
 <% end %>
 

@@ -7,12 +7,31 @@ class CocheDato < ApplicationRecord
 			indexes :car, type: :text, analyzer: :english
 			indexes :model, type: :text, analyzer: :english
 			indexes :origin, type: :text, analyzer: :english
+			indexes :mpg, type: :text, analyzer: :english
 		end
 	end
 
 	def self.search_published(query)
-		self.search({
-			size: 25,
+ 		self.search({
+ 			size: 25,
+ 			query: {
+ 				bool: {
+ 					must: [
+ 					{
+ 						multi_match: {
+ 							query: query,
+ 							fields: [:car, :model, :origin]
+ 						}
+ 					},
+ 					]
+ 				}
+ 			}
+ 		})
+ 	end
+
+	def self.search_car_mpg(query, mpg)
+ 		self.search({
+ 			size: 25,
 			query: {
 				bool: {
 					must: [
@@ -22,33 +41,14 @@ class CocheDato < ApplicationRecord
 							fields: [:car, :model, :origin]
 						}
 					},
-					]
-				}
-			}
-		})
-	end
-
-	def self.search_car_mpg(query, mpg)
-		self.search({
-			size: 25,
-			query: {
-				bool: {
-					must: [
-					{
-						multi_match: {
-							query: query,
-							fields: [:car]
-						}
-					},
 					{
 						match: {
-							query: mpg,
-							fields: [:mpg]
+							mpg: mpg
 						}
 					}]
 				}
-			}
-		})
+    }
+ 		})
 	end
 
 end
