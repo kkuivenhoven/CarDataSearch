@@ -7,6 +7,8 @@
 	<%= form.number_field :MPG, min: 1, max: 200, :step => 'any', class: "number", placeholder: "0" %><br>
 	<%= form.number_field :MPG_two, min: 1, max: 200, :step => 'any', class: "number", placeholder: "0" %><br>
 
+	Origin: <%= form.text_field :country_origin, value: params[:search_coche_datos].presence && params[:search_coche_datos][:country_origin] %><br>
+	
   <%= form.text_field :query, value: params[:search_coche_datos].presence && params[:search_coche_datos][:query] %>
   <%= form.submit 'Search' %>
 <% end %>

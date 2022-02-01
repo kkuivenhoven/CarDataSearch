@@ -92,6 +92,28 @@ class CocheDato < ApplicationRecord
  		})
 	end
 
+	def self.searchByMpgCountry(mpg, country_origin)
+ 		self.search({
+ 			size: 25,
+ 			query: {
+ 				bool: {
+ 					must: [
+ 					{
+ 						match: {
+ 							mpg: mpg
+						},
+					},
+					{
+						match: {
+							origin: country_origin	
+ 						}
+ 					},
+ 					]
+ 				}
+ 			}
+ 		})
+	end
+
 	def self.searchByMpgRange(mpg, mpg_two)
  		self.search({
  			size: 25,

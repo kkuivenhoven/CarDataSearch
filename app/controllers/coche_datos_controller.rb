@@ -4,6 +4,7 @@ class CocheDatosController < ApplicationController
 	def search
 		if (params[:search_coche_datos].nil? == false)
 			query = params[:search_coche_datos].presence && params[:search_coche_datos][:query]
+			country_origin = params[:search_coche_datos].presence && params[:search_coche_datos][:country_origin]
 			mpg = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG]
 			mpg_two = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_two]
 			mpg_checkbox = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_checkbox]
@@ -11,7 +12,11 @@ class CocheDatosController < ApplicationController
 			if(mpg_checkbox == "1")
 				if(query.empty?)
 					if(mpg_two.empty?)
-						@coche_datos = CocheDato.searchByMpg(mpg)
+						if(country_origin.empty?)
+							@coche_datos = CocheDato.searchByMpg(mpg)
+						else 
+							@coche_datos = CocheDato.searchByMpgCountry(mpg, country_origin)
+						end
 					else 
 						@coche_datos = CocheDato.searchByMpgRange(mpg, mpg_two)
 					end
