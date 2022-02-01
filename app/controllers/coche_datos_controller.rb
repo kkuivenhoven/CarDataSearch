@@ -5,13 +5,22 @@ class CocheDatosController < ApplicationController
 		if (params[:search_coche_datos].nil? == false)
 			query = params[:search_coche_datos].presence && params[:search_coche_datos][:query]
 			mpg = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG]
+			mpg_two = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_two]
 			mpg_checkbox = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_checkbox]
 			
 			if(mpg_checkbox == "1")
 				if(query.empty?)
-					@coche_datos = CocheDato.searchByMpg(mpg)
+					if(mpg_two.empty?)
+						@coche_datos = CocheDato.searchByMpg(mpg)
+					else 
+						@coche_datos = CocheDato.searchByMpgRange(mpg, mpg_two)
+					end
 				else
-					@coche_datos = CocheDato.searchByCarNameMpg(query, mpg)
+					if(mpg_two.empty?)
+						@coche_datos = CocheDato.searchByCarNameMpg(query, mpg)
+					else 
+						@coche_datos = CocheDato.searchByCarNameMpgRange(query, mpg, mpg_two)
+					end
 				end
 			else
 				@coche_datos = CocheDato.searchByCarName(query)

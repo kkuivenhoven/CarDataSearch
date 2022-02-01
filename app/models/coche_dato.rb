@@ -47,7 +47,31 @@ class CocheDato < ApplicationRecord
 						}
 					}]
 				}
-    }
+			}
+ 		})
+	end
+
+	def self.searchByCarNameMpgRange(query, mpg, mpg_two)
+ 		self.search({
+ 			size: 25,
+ 			query: {
+				bool: {
+					must: [
+					{
+						multi_match: {
+							query: query,
+							fields: [:car, :model, :origin]
+						}
+					},
+						range: {
+							mpg: {
+								gte: mpg,
+								lte: mpg_two,
+								boost: 2.0
+							}
+					}]
+				}
+ 			}
  		})
 	end
 
@@ -64,6 +88,21 @@ class CocheDato < ApplicationRecord
  					},
  					]
  				}
+ 			}
+ 		})
+	end
+
+	def self.searchByMpgRange(mpg, mpg_two)
+ 		self.search({
+ 			size: 25,
+ 			query: {
+				range: {
+					mpg: {
+						gte: mpg,
+						lte: mpg_two,
+						boost: 2.0
+					}
+				}
  			}
  		})
 	end
