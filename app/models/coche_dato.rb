@@ -11,7 +11,7 @@ class CocheDato < ApplicationRecord
 		end
 	end
 
-	def self.search_published(query)
+	def self.searchByCarName(query)
  		self.search({
  			size: 25,
  			query: {
@@ -29,7 +29,7 @@ class CocheDato < ApplicationRecord
  		})
  	end
 
-	def self.search_car_mpg(query, mpg)
+	def self.searchByCarNameMpg(query, mpg)
  		self.search({
  			size: 25,
 			query: {
@@ -48,6 +48,23 @@ class CocheDato < ApplicationRecord
 					}]
 				}
     }
+ 		})
+	end
+
+	def self.searchByMpg(mpg)
+ 		self.search({
+ 			size: 25,
+ 			query: {
+ 				bool: {
+ 					must: [
+ 					{
+ 						match: {
+ 							mpg: mpg
+ 						}
+ 					},
+ 					]
+ 				}
+ 			}
  		})
 	end
 

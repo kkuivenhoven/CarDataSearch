@@ -4,30 +4,19 @@ class CocheDatosController < ApplicationController
 	def search
 		if (params[:search_coche_datos].nil? == false)
 			query = params[:search_coche_datos].presence && params[:search_coche_datos][:query]
-			# @coche_datos = CocheDato.search_published(query)
 			mpg = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG]
 			mpg_checkbox = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_checkbox]
 			
-			if (query.nil? == false)
-				puts "----- mpg_check_box: #{mpg_checkbox}"
-				puts "----- mpg: #{mpg}"
-				puts "----- query: #{query}"
-				comma_count = query.count(',')
-				puts "count of commas: #{comma_count}"
-				
-				if(mpg_checkbox == "1")
-					print "HELLO SEARCHING CAR MPG"
-					@coche_datos = CocheDato.search_car_mpg(query, mpg)
+			if(mpg_checkbox == "1")
+				if(query.empty?)
+					@coche_datos = CocheDato.searchByMpg(mpg)
 				else
-					print " nOR SHOULDN'T BE HERE EITHER"
-					@coche_datos = CocheDato.search_published(query)
+					@coche_datos = CocheDato.searchByCarNameMpg(query, mpg)
 				end
 			else
-				print "SHOULDN'T BE HERE"
-				@coche_datos = nil
+				@coche_datos = CocheDato.searchByCarName(query)
 			end
 		else
-			print "SHOULDN'T BE HERE EITHER"
 			@coche_datos = nil
 		end
 	end
