@@ -8,7 +8,27 @@ class CocheDatosController < ApplicationController
 			mpg = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG]
 			mpg_two = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_two]
 			mpg_checkbox = params[:search_coche_datos].presence && params[:search_coche_datos][:MPG_checkbox]
-			
+
+			if(!query.empty? && !mpg.empty? && !mpg_two.empty? && !country_origin.empty? && (mpg_checkbox == "1"))
+				@coche_datos = CocheDato.searchByCarNameMpgRangeCountry(query, mpg, mpg_two, country_origin)
+			elsif(!query.empty? && !mpg.empty? && !mpg_two.empty? && (mpg_checkbox == "1") && country_origin.empty?)
+				@coche_datos = CocheDato.searchByCarNameMpgRange(query, mpg, mpg_two)
+			elsif(!query.empty? && !mpg.empty? && !country_origin.empty? && (mpg_checkbox == "1") && mpg_two.empty?)
+				@coche_datos = CocheDato.searchByCarNameMpgCountry(query, mpg, country_origin)
+			elsif(!query.empty? && !mpg.empty? && (mpg_checkbox == "1") && country_origin.empty? && mpg_two.empty?)
+				@coche_datos = CocheDato.searchByCarNameMpg(query, mpg)
+			elsif(!country_origin.empty? && !mpg.empty? && !mpg_two.empty? && (mpg_checkbox == "1") && query.empty?)
+				@coche_datos = CocheDato.searchByMpgRangeCountry(country_origin, mpg, mpg_two)
+			elsif(!mpg.empty? && !mpg_two.empty? && (mpg_checkbox == "1") && country_origin.empty? && query.empty?)
+				@coche_datos = CocheDato.searchByMpgRange(mpg, mpg_two)
+			elsif(!mpg.empty? && !country_origin.empty? && (mpg_checkbox == "1") && mpg_two.empty? && query.empty?)
+				@coche_datos = CocheDato.searchByMpgCountry(mpg, country_origin)
+			elsif(!mpg.empty? && country_origin.empty? && (mpg_checkbox == "1") && mpg_two.empty? && query.empty?)
+				@coche_datos = CocheDato.searchByMpg(mpg)
+			end
+		end
+
+=begin
 			if(mpg_checkbox == "1")
 				if(query.empty?)
 					if(mpg_two.empty?)
@@ -18,13 +38,25 @@ class CocheDatosController < ApplicationController
 							@coche_datos = CocheDato.searchByMpgCountry(mpg, country_origin)
 						end
 					else 
-						@coche_datos = CocheDato.searchByMpgRange(mpg, mpg_two)
+						if(country_origin.empty?)
+							@coche_datos = CocheDato.searchByMpgRange(mpg, mpg_two)
+						else 
+							@coche_datos = CocheDato.searchByMpgRangeCountry(country_origin, mpg, mpg_two)
+						end
 					end
 				else
 					if(mpg_two.empty?)
-						@coche_datos = CocheDato.searchByCarNameMpg(query, mpg)
+						if(country_origin.empty?)
+							@coche_datos = CocheDato.searchByCarNameMpg(query, mpg)
+						else
+							@coche_datos = CocheDato.searchByCarNameMpgCountry(query, mpg, country_origin)
+						end
 					else 
-						@coche_datos = CocheDato.searchByCarNameMpgRange(query, mpg, mpg_two)
+						if(country_origin.empty?)
+							@coche_datos = CocheDato.searchByCarNameMpgRange(query, mpg, mpg_two)
+						else
+							@coche_datos = CocheDato.searchByCarNameMpgRangeCountry(query, mpg, mpg_two, country_origin)
+						end
 					end
 				end
 			else
@@ -33,6 +65,7 @@ class CocheDatosController < ApplicationController
 		else
 			@coche_datos = nil
 		end
+=end
 	end
 
   # GET /coche_datos or /coche_datos.json
@@ -101,4 +134,5 @@ class CocheDatosController < ApplicationController
     def coche_dato_params
       params.fetch(:coche_dato, {})
     end
+
 end

@@ -51,6 +51,63 @@ class CocheDato < ApplicationRecord
  		})
 	end
 
+	def self.searchByCarNameMpgCountry(query, mpg, country_origin)
+ 		self.search({
+ 			size: 25,
+			query: {
+				bool: {
+					must: [
+					{
+						multi_match: {
+							query: query,
+							fields: [:car, :model]
+						}
+					},
+					{
+						match: {
+							mpg: mpg
+						}
+					},
+					{
+						match: {
+							origin: country_origin
+						}
+					}
+          ]
+				}
+			}
+ 		})
+	end
+
+	def self.searchByCarNameMpgRangeCountry(query, mpg, mpg_two, country_origin)
+ 		self.search({
+ 			size: 25,
+ 			query: {
+				bool: {
+					must: [
+					{
+						multi_match: {
+							query: query,
+							fields: [:car, :model]
+						}
+					},
+					{
+						match: {
+							origin: country_origin
+						}
+					},
+						range: {
+							mpg: {
+								gte: mpg,
+								lte: mpg_two,
+								boost: 2.0
+							}
+					}]
+				}
+ 			}
+ 		})
+	end
+
 	def self.searchByCarNameMpgRange(query, mpg, mpg_two)
  		self.search({
  			size: 25,
@@ -110,6 +167,32 @@ class CocheDato < ApplicationRecord
  					},
  					]
  				}
+ 			}
+ 		})
+	end
+
+	def self.searchByMpgRangeCountry(country_origin, mpg, mpg_two)
+ 		self.search({
+ 			size: 25,
+ 			query: {
+				bool: {
+					must: [
+						{
+							match: {
+								origin: country_origin
+							}
+						},
+						{
+							range: {
+								mpg: {
+									gte: mpg,
+									lte: mpg_two,
+									boost: 2.0
+								}
+							}
+						}
+					]
+				}
  			}
  		})
 	end
