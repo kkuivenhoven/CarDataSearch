@@ -9,6 +9,8 @@
 
 	Origin: <%= form.text_field :country_origin, value: params[:search_coche_datos].presence && params[:search_coche_datos][:country_origin] %><br>
 	Year: <%= form.number_field :model, min: 50, max: 99, :step => 'any', class: "number", placeholder: "0" %><br>
+	Horsepower: <%= form.number_field :horsepower, min: 50, max: 500, :step => 'any', class: "number", placeholder: "0" %><br>
+	Horsepower Two: <%= form.number_field :horsepower_two, min: 50, max: 500, :step => 'any', class: "number", placeholder: "0" %><br>
 	
   <%= form.text_field :query, value: params[:search_coche_datos].presence && params[:search_coche_datos][:query] %>
   <%= form.submit 'Search' %>
