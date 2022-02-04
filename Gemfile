@@ -7,6 +7,8 @@ gem 'elasticsearch', '~> 7.16.1'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
+gem 'bootstrap', '~> 5.1.3'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.4', '>= 6.1.4.4'
 # Use sqlite3 as the database for Active Record

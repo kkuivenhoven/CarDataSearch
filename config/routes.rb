@@ -5,7 +5,8 @@ Rails.application.routes.draw do
 		end
 	end
 
-	root 'coche_datos#index'
+	# root 'coche_datos#index'
+	root 'statics#home'
 
   resources :static
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

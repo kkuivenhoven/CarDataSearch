@@ -1,6 +1,9 @@
 class StaticsController < ApplicationController
   before_action :set_static, only: %i[ show edit update destroy ]
 
+	def home
+	end
+
   # GET /statics or /statics.json
   def index
     @statics = Static.all

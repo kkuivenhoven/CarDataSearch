@@ -1,20 +1,32 @@
+<script>
+
+</script>
+
 <h1>Elastic search for Coches</h1>
 
 
-<%= form_for :search_coche_datos, url: search_coche_datos_path, method: :get do |form| %>
-	<!--%= form.label :MPG %-->
-	<%= form.check_box :MPG_checkbox, class: "form-control", placeholder: "Specify MPG?" %>Search by MPG?<br>
-	<%= form.number_field :MPG, min: 1, max: 200, :step => 'any', class: "number", placeholder: "0" %><br>
-	<%= form.number_field :MPG_two, min: 1, max: 200, :step => 'any', class: "number", placeholder: "0" %><br>
+<div style="width: 300px;">
 
-	Origin: <%= form.text_field :country_origin, value: params[:search_coche_datos].presence && params[:search_coche_datos][:country_origin] %><br>
-	Year: <%= form.number_field :model, min: 50, max: 99, :step => 'any', class: "number", placeholder: "0" %><br>
-	Horsepower: <%= form.number_field :horsepower, min: 50, max: 500, :step => 'any', class: "number", placeholder: "0" %><br>
-	Horsepower Two: <%= form.number_field :horsepower_two, min: 50, max: 500, :step => 'any', class: "number", placeholder: "0" %><br>
-	
-  <%= form.text_field :query, value: params[:search_coche_datos].presence && params[:search_coche_datos][:query] %>
-  <%= form.submit 'Search' %>
-<% end %>
+	<%= form_for :search_coche_datos, url: search_coche_datos_path, method: :get do |form| %>
+		<!--%= form.label :MPG %-->
+		<!--%= form.check_box :MPG_checkbox, class: "form-control" %-->
+		<%= form.check_box :MPG_checkbox, class: "form-check-input"  %>&nbsp;Search by MPG?<br>
+		<%= form.number_field :MPG, min: 1, max: 200, :step => 'any', class: "form-control number", placeholder: "0" %><br>
+		<%= form.number_field :MPG_two, min: 1, max: 200, :step => 'any', class: "form-control number", placeholder: "0" %><br>
+
+		Origin: <%= form.text_field :country_origin, value: params[:search_coche_datos].presence && params[:search_coche_datos][:country_origin], class: "form-control" %><br>
+		Year: <%= form.number_field :model, min: 50, max: 99, :step => 'any', class: "number form-control ", placeholder: "0" %><br>
+
+		<%= form.check_box :horsepower_checkbox, class: "form-check-input" %>&nbsp;Search by horsepower?<br>
+		Horsepower: <%= form.number_field :horsepower, min: 50, max: 500, :step => 'any', class: "number form-control", placeholder: "0" %><br>
+		Horsepower Two: <%= form.number_field :horsepower_two, min: 50, max: 500, :step => 'any', class: "number form-control", placeholder: "0" %><br>
+		
+		<%= form.text_field :query, value: params[:search_coche_datos].presence && params[:search_coche_datos][:query], class: "form-control" %>
+		<br>
+		<%= form.submit 'Search', class: "btn" %>
+	<% end %>
+
+</div>
 
 
 <% if @coche_datos.nil? %>
@@ -26,11 +38,11 @@
 		<!--<p>count: <= @coche_datos.size %>-->
 
 <% if @coche_datos.nil? %>
-	<h1><b>Coche Datos is null</b></h1>
+	<h1><b>Car Datum is null</b></h1>
 
 <% else %>
 
-	<h1>Coche Datos is not null</h1>
+	<h1>Car Datum is not null</h1>
     <table style="width: 100%;">
       <thead>
          <tr>
