@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 		collection do
 			get :search
 			get :ajax_search
+			get :retrieve_searches
 		end
 	end
 
@@ -13,6 +14,7 @@ Rails.application.routes.draw do
 		collection do
 			get :test
 			get :get_data
+			get :hide_data
 		end
 	end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

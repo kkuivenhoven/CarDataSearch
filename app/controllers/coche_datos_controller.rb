@@ -100,17 +100,12 @@ class CocheDatosController < ApplicationController
 
 	def ajax_search
     @rhs_coches = CocheDato.all
-		if params[:search]
-			@search_results_posts = CocheDato.searchByCarName(params[:search])
-			respond_to do |format|
-				format.html { render(:text => "not implemented") }
+	end
+
+	def retrieve_searches
+		@search_results_posts = CocheDato.searchByCarName(params[:search])
+		respond_to do |format|
 				format.js { render layout: false }
-				# byebug
-				# format.js { render 'searchResults' }
-				# format.html { render :partial => 'results' }
-			end
-		else
-			@search_results_posts = CocheDato.all
 		end
 	end
 

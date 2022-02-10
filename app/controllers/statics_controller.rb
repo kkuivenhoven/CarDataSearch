@@ -14,6 +14,12 @@ class StaticsController < ApplicationController
 		end
 	end
 
+	def hide_data
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
   # GET /statics or /statics.json
   def index
     @statics = Static.all
