@@ -2,6 +2,7 @@ class CocheDatosController < ApplicationController
   before_action :set_coche_dato, only: %i[ show edit update destroy ]
 
 	def search
+    @rhs_coches = CocheDato.all
 		if (params[:search_coche_datos].nil? == false)
 			query = params[:search_coche_datos].presence && params[:search_coche_datos][:query]
 			country_origin = params[:search_coche_datos].presence && params[:search_coche_datos][:country_origin]
@@ -95,6 +96,22 @@ class CocheDatosController < ApplicationController
 			@coche_datos = nil
 		end
 =end
+	end
+
+	def ajax_search
+    @rhs_coches = CocheDato.all
+		if params[:search]
+			@search_results_posts = CocheDato.searchByCarName(params[:search])
+			respond_to do |format|
+				format.html { render(:text => "not implemented") }
+				format.js { render layout: false }
+				# byebug
+				# format.js { render 'searchResults' }
+				# format.html { render :partial => 'results' }
+			end
+		else
+			@search_results_posts = CocheDato.all
+		end
 	end
 
   # GET /coche_datos or /coche_datos.json

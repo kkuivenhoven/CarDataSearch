@@ -4,6 +4,16 @@ class StaticsController < ApplicationController
 	def home
 	end
 
+	def test
+	end
+
+	def get_data
+		@test_data = "hello world!"
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
   # GET /statics or /statics.json
   def index
     @statics = Static.all

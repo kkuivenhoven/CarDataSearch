@@ -1,0 +1,41 @@
+<h1>Ajax Search</h1>
+<script>
+function callAlert() {
+	alert(" TESTING ");
+}
+
+// window.onload() = callAlert();
+</script>
+
+<!-- to submit a form via AJAX in Rails, add remote: true to the form_tag argument -->
+
+<button onclick="callAlert()">Click me</button><br><br>
+
+<div style="width: 700px;" class="border rounded bg-light">
+	<%= form_tag(ajax_search_coche_datos_path, method: "get", remote: true) do %>
+		Search by car name:<br>
+		<%= text_field_tag :search, params[:search], placeholder: "Enter search term" %><br><br>
+
+		<%= submit_tag 'Search', class: "btn btn-dark search-btn" %>
+	<% end %>
+</div>
+<br><br>
+
+<div class="container" id="blogpost-table">
+	<table>
+		<thead>
+			<tr>
+				<th>The Name</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% @search_results_posts.each do |coche| %>
+				<tr><%= coche.car %></tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
+
+<div id="search-results">
+</div>

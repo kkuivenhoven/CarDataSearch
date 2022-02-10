@@ -6,10 +6,13 @@
 <script>
 function onClick() {
 	var mpgDiv = document.getElementById('mpg_fields');
+	var mpgPlaceholderDiv = document.getElementById('mpg_tmp_placeholder');
 	if(mpgDiv.style.display == 'none') {
 		mpgDiv.style.display = 'block';
+		mpgPlaceholderDiv = 'none';
 	} else {
 		mpgDiv.style.display = 'none';
+		mpgPlaceholderDiv = 'block';
 	}
 }
 
@@ -22,53 +25,98 @@ function onClickTwo() {
 	}
 }
 
-window.onload = (event) => {
+function hideFields() {
 	var mpgDiv = document.getElementById('mpg_fields');
 	mpgDiv.style.display = 'none';
 	var horsepowerDiv = document.getElementById('horsepower_fields');
 	horsepowerDiv.style.display = 'none';
-};
+}
+
+window.onload = hideFields();
+
 </script>
 
 <h1>Search for 70's and 80's Cars</h1>
 
-<div style="width: 700px;" class="border rounded bg-light">
+<div class="row">
+	<div class="col-6">
+		<div style="width: 700px;" class="border rounded bg-light">
 
-	<div class="container" style="padding-top: 25px; padding-bottom: 60px;">
-		<%= form_for :search_coche_datos, url: search_coche_datos_path, method: :get do |form| %>
-			Search by car name:<br>
-			<%= form.text_field :query, value: params[:search_coche_datos].presence && params[:search_coche_datos][:query], class: "form-control" %><br>
+			<div class="container" style="padding-top: 25px; padding-bottom: 60px;">
+				<%= form_for :search_coche_datos, url: search_coche_datos_path, method: :get do |form| %>
+					Search by car name:<br>
+					<%= form.text_field :query, value: params[:search_coche_datos].presence && params[:search_coche_datos][:query], class: "form-control" %><br>
 
-			Origin: <%= form.text_field :country_origin, value: params[:search_coche_datos].presence && params[:search_coche_datos][:country_origin], class: "form-control" %><br>
-			Year: <%= form.number_field :model, min: 50, max: 99, :step => 'any', class: "number form-control ", placeholder: "0" %><br>
+					Origin: <%= form.text_field :country_origin, value: params[:search_coche_datos].presence && params[:search_coche_datos][:country_origin], class: "form-control" %><br>
+					Year: <%= form.number_field :model, min: 50, max: 99, :step => 'any', class: "number form-control ", placeholder: "0" %><br>
 
-			<div class="row">
-				<div class="col-6">
-					<%= form.check_box :MPG_checkbox, class: "form-check-input", onclick: "onClick();" %>&nbsp;Search by MPG?<br>
-				</div>
-				<div class="col-6">
-					<%= form.check_box :horsepower_checkbox, class: "form-check-input", onclick: "onClickTwo();" %>&nbsp;Search by horsepower?<br>
-				</div>
+					<div class="row">
+						<div class="col-6">
+							<%= form.check_box :MPG_checkbox, class: "form-check-input", onclick: "onClick();" %>&nbsp;Search by MPG?<br>
+						</div>
+						<div class="col-6">
+							<%= form.check_box :horsepower_checkbox, class: "form-check-input", onclick: "onClickTwo();" %>&nbsp;Search by horsepower?<br>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-6">
+							<div id="mpg_fields">
+								MPG: <%= form.number_field :MPG, min: 1, max: 200, :step => 'any', class: "form-control number", placeholder: "0" %><br>
+								MPG Two: <%= form.number_field :MPG_two, min: 1, max: 200, :step => 'any', class: "form-control number", placeholder: "0" %><br>
+							</div>
+						</div>
+
+						<div class="col-6" id="horsepower_fields">
+							<!--%= form.check_box :horsepower_checkbox, class: "form-check-input" %>&nbsp;Search by horsepower?<br-->
+							Horsepower: <%= form.number_field :horsepower, min: 50, max: 500, :step => 'any', class: "number form-control", placeholder: "0" %><br>
+							Horsepower Two: <%= form.number_field :horsepower_two, min: 50, max: 500, :step => 'any', class: "number form-control", placeholder: "0" %><br>
+						</div>
+					</div>
+				
+					<%= form.submit 'Search', class: "btn btn-dark search-btn" %>
+				<% end %>
 			</div>
 
-			<div class="row">
-				<div class="col-6" id="mpg_fields">
-					<!--%= form.check_box :MPG_checkbox, class: "form-check-input", onclick: "onClick();" %>&nbsp;Search by MPG?<br-->
-					MPG: <%= form.number_field :MPG, min: 1, max: 200, :step => 'any', class: "form-control number", placeholder: "0" %><br>
-					MPG Two: <%= form.number_field :MPG_two, min: 1, max: 200, :step => 'any', class: "form-control number", placeholder: "0" %><br>
-				</div>
-
-				<div class="col-6" id="horsepower_fields">
-					<!--%= form.check_box :horsepower_checkbox, class: "form-check-input" %>&nbsp;Search by horsepower?<br-->
-					Horsepower: <%= form.number_field :horsepower, min: 50, max: 500, :step => 'any', class: "number form-control", placeholder: "0" %><br>
-					Horsepower Two: <%= form.number_field :horsepower_two, min: 50, max: 500, :step => 'any', class: "number form-control", placeholder: "0" %><br>
-				</div>
-			</div>
-		
-			<%= form.submit 'Search', class: "btn btn-dark search-btn" %>
-		<% end %>
+		</div>
 	</div>
 
+	<div class="col-6">
+		<h1>Coches</h1>
+
+		<table>
+      <thead>
+         <tr>
+           <th>Car</th>
+           <th>MPG</th>
+           <th>Cylinders</th>
+           <!--th>Displacement</th-->
+           <th>Horsepower</th>
+           <th>Weight</th>
+           <!--th>Acceleration</th-->
+           <th>Model</th>
+           <th>Origin</th>
+         </tr>
+			</thead>
+
+			<tbody>
+				<% @rhs_coches.each do |coche| %>
+					<tr>
+						<td><%= coche.car %></td>
+						<td><%= coche.mpg %></td>
+						<td><%= coche.cylinders %></td>
+						<!--td>%= coche.displacement %></td-->
+						<td><%= coche.horsepower %></td>
+						<td><%= coche.weight %></td>
+						<!--td><= coche.acceleration %></td-->
+						<td><%= coche.model %></td>
+						<td><%= coche.origin %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+
+	</div>
 </div>
 
 
@@ -80,10 +128,10 @@ window.onload = (event) => {
 <% end %>
 
 
-<% if @coche_datos.nil? %>
+<!--% if @coche_datos.nil? %>
 	<h1><b>Car Datum is null</b></h1>
 
-<% else %>
+ else %>
 
 	<h1>Car Datum is not null</h1>
     <table style="width: 100%;">
@@ -100,26 +148,26 @@ window.onload = (event) => {
            <th>Model</th>
            <th>Origin</th>
          </tr>
-      </thead>
+      <!--/thead-->
 
-		<tbody>
-			<% @coche_datos.each_with_index do |coche, index| %>
+		<!--tbody>
+			 @coche_datos.each_with_index do |coche, index| %>
 				<tr>
-					<td><%= (index + 1) %></td>
-					<td><%= coche.car %></td>
-					<td><%= coche.mpg %></td>
-					<td><%= coche.cylinders %></td>
-					<td><%= coche.displacement %></td>
-					<td><%= coche.horsepower %></td>
-					<td><%= coche.weight %></td>
-					<td><%= coche.acceleration %></td>
-					<td><%= coche.model %></td>
-					<td><%= coche.origin %></td>
-					<td><%= link_to 'View', coche_dato_path(coche.id) %></td>
+					<td><= (index + 1) %></td>
+					<td><= coche.car %></td>
+					<td><= coche.mpg %></td>
+					<td><= coche.cylinders %></td>
+					<td><= coche.displacement %></td>
+					<td><= coche.horsepower %></td>
+					<td><= coche.weight %></td>
+					<td><= coche.acceleration %></td>
+					<td><= coche.model %></td>
+					<td><= coche.origin %></td>
+					<td><= link_to 'View', coche_dato_path(coche.id) %></td>
 				</tr>
-			<% end %>
+			< end %>
 			<tbody>
-		</table>
+		</table-->
 
-<% end %>
+<!--% end %-->
 
