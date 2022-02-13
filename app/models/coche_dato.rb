@@ -55,6 +55,25 @@ class CocheDato < ApplicationRecord
  					{
  						multi_match: {
  							query: query,
+ 							fields: [:car]
+ 						}
+ 					},
+ 					]
+ 				}
+ 			}
+ 		})
+ 	end
+
+=begin
+	def self.searchByCarName(query)
+ 		self.search({
+ 			size: 25,
+ 			query: {
+ 				bool: {
+ 					must: [
+ 					{
+ 						multi_match: {
+ 							query: query,
  							fields: [:car, :model, :origin]
  						}
  					},
@@ -63,6 +82,7 @@ class CocheDato < ApplicationRecord
  			}
  		})
  	end
+=end
 
 	def self.searchByCarNameMpg(query, mpg)
  		self.search({

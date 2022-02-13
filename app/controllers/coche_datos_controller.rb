@@ -1,5 +1,6 @@
 class CocheDatosController < ApplicationController
-  before_action :set_coche_dato, only: %i[ show edit update destroy ]
+  # before_action :set_coche_dato, only: %i[ show edit update destroy ]
+	before_action :force_json, only: :buscar_autocomplete
 
 	def search
     @rhs_coches = CocheDato.all
@@ -109,6 +110,16 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
+	def index_autocomplete
+	end
+
+	def buscar_autocomplete
+		q = params[:q].downcase
+		# q = params[:q]
+		@people = CocheDato.where("car LIKE ?", "%#{q}%").limit(5)
+		# @people = CocheDato.searchByCarName(q)
+	end
+
   # GET /coche_datos or /coche_datos.json
   def index
     @coche_datos = CocheDato.all
@@ -175,5 +186,9 @@ class CocheDatosController < ApplicationController
     def coche_dato_params
       params.fetch(:coche_dato, {})
     end
+
+		def force_json
+			request.format = :json
+		end
 
 end

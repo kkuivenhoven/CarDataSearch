@@ -4,11 +4,14 @@ Rails.application.routes.draw do
 			get :search
 			get :ajax_search
 			get :retrieve_searches
+			get :buscar_autocomplete
 		end
 	end
 
 	# root 'coche_datos#index'
-	root 'statics#home'
+	# root 'statics#home'
+	root 'coche_datos#index_autocomplete'
+	# get 'coche_datos/buscar_autocomplete', to: 'coche_datos#buscar_autocomplete'
 
   resources :statics do
 		collection do
