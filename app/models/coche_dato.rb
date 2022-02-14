@@ -46,7 +46,29 @@ class CocheDato < ApplicationRecord
  		})
 	end
 
+	def self.suggestSearchCarName(query)
+ 		self.search({
+ 			size: 25,
+ 			query: {
+				multi_match: {
+					query: query,
+					fields: [:car]
+				}
+ 			},
+			suggest: {
+				text: query,
+				car: {
+					term: {
+						size: 1,
+						field: :car
+					}
+				},
+			}
+ 		})
+	end
+
 	def self.searchByCarName(query)
+ 		# self.suggest({
  		self.search({
  			size: 25,
  			query: {

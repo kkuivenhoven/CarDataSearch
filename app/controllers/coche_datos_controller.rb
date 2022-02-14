@@ -116,8 +116,8 @@ class CocheDatosController < ApplicationController
 	def buscar_autocomplete
 		q = params[:q].downcase
 		# q = params[:q]
-		@people = CocheDato.where("car LIKE ?", "%#{q}%").limit(5)
-		# @people = CocheDato.searchByCarName(q)
+		# @people = CocheDato.where("car LIKE ?", "%#{q}%").limit(5)
+		@people = CocheDato.suggestSearchCarName(q)
 	end
 
   # GET /coche_datos or /coche_datos.json
