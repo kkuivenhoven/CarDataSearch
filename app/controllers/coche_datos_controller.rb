@@ -111,11 +111,12 @@ class CocheDatosController < ApplicationController
 	end
 
 	def index_autocomplete
+		# @all_cars = CocheDato.all
 	end
 
 	def buscar_autocomplete
-		q = params[:q].downcase
-		# q = params[:q]
+		# q = params[:q].downcase
+		q = params[:q]
 		# @people = CocheDato.where("car LIKE ?", "%#{q}%").limit(5)
 		@people = CocheDato.suggestSearchCarName(q)
 	end

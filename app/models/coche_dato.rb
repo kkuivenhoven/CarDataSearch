@@ -2,9 +2,65 @@ class CocheDato < ApplicationRecord
 	include Elasticsearch::Model
 	include Elasticsearch::Model::Callbacks
 
-	settings do
+			# indexes :car
+			# indexes :car, type: :text, analyzer: :english
+			# indexes :car, type: :completion, analyzer: :english, search_analyzer: :autocomplete
+			# indexes :car, type: :completion, analyzer: :autocomplete
+=begin
+      indexes :car, type: :text, analyzer: :english do
+        indexes :keyword, type: "keyword"
+        indexes :suggest, type: "completion"
+      end
+=end
+	# settings do
+
+=begin
+	settings index: {
+    analysis: {
+      filter: {
+        autocomplete_filter: { 
+          type: 'edge_ngram',
+					min_gram: 1,
+					max_gram: 20
+        } 
+      },
+      analyzer: {
+        autocomplete: {
+          type: 'custom',
+					tokenizer: 'edge_ngram',
+          filter: ['lowercase', 'autocomplete_filter'],
+        }
+      }
+    }
+=end
+	settings index: {
+		 analysis: {
+			 analyzer: {
+				 # we define custom analyzer with name autocomplete
+				 autocomplete: {
+					 # type should be custom for custom analyzers
+					 type: :custom,
+					 # we use standard tokenizer
+					 tokenizer: :standard,
+					 # we apply two token filters
+					 # autocomplete filter is a custom filter that we defined above
+					 filter: %i[lowercase autocomplete]
+				 }
+			 },
+			 filter: {
+				 # we define custom token filter with name autocomplete
+				 autocomplete: {
+					 type: :edge_ngram,
+					 min_gram: 1,
+					 max_gram: 25
+				 }
+			 }
+		 }
+  } do
 		mappings dynamic: false do
-			indexes :car, type: :text, analyzer: :english
+			# indexes :car, type: :text, analyzer: :autocomplete_filter
+			# indexes :car, type: :text, analyzer: :english, search_analyzer: "autocomplete"
+			indexes :car, type: :text, analyzer: :autocomplete
 			indexes :model, type: :text, analyzer: :english
 			indexes :origin, type: :text, analyzer: :english
 			indexes :mpg, type: :text, analyzer: :english
@@ -48,6 +104,96 @@ class CocheDato < ApplicationRecord
 
 	def self.suggestSearchCarName(query)
  		self.search({
+ 			query: {
+				match: {
+					car: {
+						query: query,
+						fuzziness: 1
+					}
+				}
+ 			}
+		})
+	end
+=begin
+ 		self.search({
+ 			size: 25,
+			suggest: {
+				text: query,
+				car: {
+					term: {
+						analyzer: :standard,
+						field: :car,
+						min_word_length: 1,
+						suggest_mode: :always
+					}
+				}
+			}
+ 		})
+===============
+ 			query: {
+				multi_match: {
+					query: query,
+					fields: [:car]
+				}
+ 			}# ,
+			suggest: {
+				text: query,
+				car: {
+					term: {
+						analyzer: :standard,
+						field: :car,
+						min_word_length: 1,
+						suggest_mode: :always
+					}
+				},
+			}
+=end
+=begin
+ 		self.search({
+ 			query: {
+				multi_match: {
+					query: query,
+					fields: [:car]
+				}
+ 			},
+			suggest: {
+				suggestions: {
+					prefix: query,
+					completion: {
+						field: :car,
+						size: 5
+					}
+				}
+			}
+ 		})
+=================
+ 		self.search({
+			suggest: {
+				car: {
+					prefix: query,
+					completion: {
+						field: :car,
+						size: 5
+					}
+				}
+			}
+ 		})
+=================
+ 		self.search({
+			size: 25,
+			"suggest": {
+				"auto-complete-suggest": {
+					"prefix": "#{query}",
+					"completion": {
+						"size": 5,
+						"field": "car"
+					}
+				}
+			}
+ 		})
+	end
+===================
+ 		self.search({
  			size: 25,
  			query: {
 				multi_match: {
@@ -66,6 +212,7 @@ class CocheDato < ApplicationRecord
 			}
  		})
 	end
+=end
 
 	def self.searchByCarName(query)
  		# self.suggest({
