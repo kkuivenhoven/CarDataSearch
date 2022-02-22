@@ -1,24 +1,7 @@
 class StaticsController < ApplicationController
   before_action :set_static, only: %i[ show edit update destroy ]
-	# skip_before_action :verify_authenticity_token
-	# https://stackoverflow.com/questions/3364492/actioncontrollerinvalidauthenticitytoken
-	## VULNERABILITY ?? 
-	# skip_before_action :skip_forgery_protection
 
 	def home
-	end
-
-	def search
-	end
-
-	def execute_search
-		@searchResults = params["SearchResults"].as_json
-		@hashSearchResults = @searchResults.to_h
-		@hello = "hello world"
-		# byebug
-		respond_to do |format|
-			format.js { render layout: false }
-		end
 	end
 
 	def test
@@ -38,21 +21,13 @@ class StaticsController < ApplicationController
 	end
 
 	def renovated_search
-		@rhs_coches = CocheDato.all
+		@rhs_coches = CocheDato.all.order(:car)
 	end
 
 	def retrieve_searches
-		# @search_results_posts = "" #:CocheDato.searchByCarName(params[:search])
 		@search_results_posts = CocheDato.suggestSearchCarName(params["SearchPhrase"])
-		@hello = "hello"
-		# byebug
 		respond_to do |format|
-			# format.html { render layout: false}
-			# format.html { render partial: 'statics/retrieve_searches',
-					# locals: { hello: @hello, search_results_posts: @search_results_posts }}
-			# format.js { render partial: 'retrieve_searches.js.erb' }
 			format.js { render layout: false }
-			# format.js # { render layout: false }
 		end
 	end
 

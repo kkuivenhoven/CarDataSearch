@@ -2,15 +2,15 @@ class CocheDato < ApplicationRecord
 	include Elasticsearch::Model
 	include Elasticsearch::Model::Callbacks
 
-			# indexes :car
-			# indexes :car, type: :text, analyzer: :english
-			# indexes :car, type: :completion, analyzer: :english, search_analyzer: :autocomplete
-			# indexes :car, type: :completion, analyzer: :autocomplete
+	# indexes :car
+	# indexes :car, type: :text, analyzer: :english
+	# indexes :car, type: :completion, analyzer: :english, search_analyzer: :autocomplete
+	# indexes :car, type: :completion, analyzer: :autocomplete
 =begin
-      indexes :car, type: :text, analyzer: :english do
-        indexes :keyword, type: "keyword"
-        indexes :suggest, type: "completion"
-      end
+	indexes :car, type: :text, analyzer: :english do
+		indexes :keyword, type: "keyword"
+		indexes :suggest, type: "completion"
+	end
 =end
 	# settings do
 
@@ -104,6 +104,7 @@ class CocheDato < ApplicationRecord
 
 	def self.suggestSearchCarName(query)
  		self.search({
+			size: 50,
  			query: {
 				match: {
 					car: {

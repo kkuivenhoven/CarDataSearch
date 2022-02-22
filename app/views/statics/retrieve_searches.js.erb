@@ -1,1 +1,6 @@
-$("#current_retrieve").html("<%= escape_javascript(render partial: 'statics/retrieve_searches', locals: { search_results_posts: @search_results_posts, hello: @hello }) %>");
+if(<%= @search_results_posts.size %> > 0) {
+	$("#blogpost-table-two").hide();
+	$("#current_retrieve").html("<%= escape_javascript(render partial: 'statics/retrieve_searches', locals: { search_results_posts: @search_results_posts, hello: @hello }) %>");
+} else {
+	$("#blogpost-table-two").show();
+}

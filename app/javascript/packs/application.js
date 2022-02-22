@@ -20,6 +20,6 @@ require("easy-autocomplete")
 
 import "packs/autocomplete"
 import "packs/latest_autocomplete"
-import "packs/new_search"
+import "packs/on_key_up_search"
 import "packs/ajax_call"
 

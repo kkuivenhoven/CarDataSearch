@@ -16,12 +16,25 @@
 
 <!--%= text_field_tag 'renovSearch', nil, placeholder: 'search', onkeyup: "$(#renovSearch).submit();" %-->
 
-<!--%= link_to 'Get Data', statics_retrieve_search_path, id: "item", remote: true %><br><br-->
-<!--%= link_to 'Get Data', retrieve_searches_statics_path, id: "item", remote: true %><br><br-->
-
-
-<!--input type="text" id="fname" name="renovated_search" class="search" value="" data-remote="true"><br><br-->
 <input type="text" id="renovated_search" name="renovated_search" class="search" value=""><br><br>
+
+<div id="blogpost-table-two">
+  <table>
+    <thead>
+      <tr>
+        <th>The Name</th>
+      </tr>
+    </thead>
+
+    <tbody>
+       <% @rhs_coches.each do |coche| %>
+        <tr>
+          <td><%= coche.car %></td>
+        </tr>
+       <% end %>
+    </tbody>
+  </table>
+</div>
 
 <!--%= text_field_tag 'renovated_search', '', remote: true %-->
 

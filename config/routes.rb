@@ -20,19 +20,12 @@ Rails.application.routes.draw do
 			get :test
 			get :get_data
 			get :hide_data
-			get :search
 			get :renovated_search
 			post :retrieve_searches
-			# match 'retrieve_searches', as: 'retrieve_searches', action: 'retrieve_searches', via: [:get, :post]
-			# post :retrieve_searches
 		end
 	end
-  # match 'statics/retrieve_searches' => 'statics#retrieve_searches', as: :statics_retrieve_search, via: [:get, :post]
-	# post 'statics/retrieve_searches', to: 'statics#retrieve_searches'
 
-	# get 'statics/execute_search', to: 'statics#execute_search'
 	post 'statics/execute_search', to: 'statics#execute_search'
-	# match 'statics/execute_search' => 'statics#execute_search', as: :statics_execute_search, via: [:get, :post]
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 	# root 'statics#index'
