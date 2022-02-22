@@ -1,6 +1,7 @@
 class CocheDatosController < ApplicationController
   # before_action :set_coche_dato, only: %i[ show edit update destroy ]
-	before_action :force_json, only: :buscar_autocomplete
+	# before_action :force_json, only: [:buscar_autocomplete, :buscar_latest_autocomplete]
+	before_action :force_json, only: [:buscar_autocomplete, :buscar_latest_autocomplete]
 
 	def search
     @rhs_coches = CocheDato.all
@@ -116,9 +117,26 @@ class CocheDatosController < ApplicationController
 
 	def buscar_autocomplete
 		# q = params[:q].downcase
-		q = params[:q]
 		# @people = CocheDato.where("car LIKE ?", "%#{q}%").limit(5)
+		q = params[:q]
 		@people = CocheDato.suggestSearchCarName(q)
+	end
+
+	def index_latest_autocomplete
+	# like ajax_search
+	end
+
+	def buscar_latest_autocomplete
+	# like retrieve_searches
+		q = params[:q]
+		@people = CocheDato.suggestSearchCarName(q)
+		# @people = CocheDato.searchByCarName(params[:search])
+		respond_to do |format|
+			# format.js { render layout: false }
+			# format.json { render json: @people }
+			format.json { render layout: false }
+			# render :partial => "coche_datos/test.json.erb"
+		end
 	end
 
   # GET /coche_datos or /coche_datos.json

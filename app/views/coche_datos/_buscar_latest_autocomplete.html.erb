@@ -1,0 +1,15 @@
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		 <% @people.each do |coche| %>
+			<tr>
+				<td><%= coche.car %></td>
+			</tr>
+		 <% end %>
+	</tbody>
+</table>

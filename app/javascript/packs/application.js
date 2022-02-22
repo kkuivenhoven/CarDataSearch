@@ -12,8 +12,14 @@ Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
 
+window.Rails = Rails;
+
 // global.$ = require('jquery')
 require('jquery')
 require("easy-autocomplete")
 
 import "packs/autocomplete"
+import "packs/latest_autocomplete"
+import "packs/new_search"
+import "packs/ajax_call"
+

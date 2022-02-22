@@ -1,0 +1,36 @@
+<h1> Renovated Search </h1>
+
+<!--%= form_tag retrieve_searches_statics_path, remote: true, method: :post, authenticity_token: true do |f| %>
+  %= text_field_tag :search_query, params[:search], onkeyup: "$(this).parent('form').submit();"%>
+ end %-->
+
+<!--%= form_tag(retrieve_searches_statics_path, method: 'post', format: :js, remote: true, :authenticity_token => true) do %>
+    %= text_field_tag 'search_query', nil, placeholder: 'search item name', onkeyup: "$(this).parent('form').submit();" %>
+    %= submit_tag "Search" %>
+< end %-->
+
+<!--%= form_tag retrieve_searches_statics_path, remote: true, method: :get do %-->
+<!--%= form_tag retrieve_searches_statics_path, method: :get do %>
+	% text_field_tag :search, params[:search], onkeyup: "$(this).parent('form').submit();" %>
+ end %-->
+
+<!--%= text_field_tag 'renovSearch', nil, placeholder: 'search', onkeyup: "$(#renovSearch).submit();" %-->
+
+<!--%= link_to 'Get Data', statics_retrieve_search_path, id: "item", remote: true %><br><br-->
+<!--%= link_to 'Get Data', retrieve_searches_statics_path, id: "item", remote: true %><br><br-->
+
+
+<!--input type="text" id="fname" name="renovated_search" class="search" value="" data-remote="true"><br><br-->
+<input type="text" id="renovated_search" name="renovated_search" class="search" value=""><br><br>
+
+<!--%= text_field_tag 'renovated_search', '', remote: true %-->
+
+<!--%= form_tag(retrieve_searches_coche_datos_path, method: "get", remote: true, html: {id: 'edit-form'}) do %>
+    Search by car name:<br>
+    <= text_field_tag 'renovated_search', '', remote: true %--> <!--, onkeyup: "$(this).parent('form').submit();" %-->
+		<!--%= submit_tag 'Search', class: "btn btn-dark search-btn" %>
+< end %-->
+
+
+<div id="current_retrieve"></div>
+

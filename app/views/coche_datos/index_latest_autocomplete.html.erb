@@ -1,0 +1,24 @@
+<h1>Index Latest Autocomplete</h1>
+
+<input id="inputOne" type="search" placeholder="Enter car name..." data-behavior="autocomplete">
+
+<br><br><br><br><br><br><br><br><br><br><br>
+
+<input id="inputTwo" placeholder="Other car">
+
+<!--div style="width: 700px;" class="border rounded bg-light">
+	<= form_tag(buscar_latest_autocomplete_coche_datos_path, method: "get", remote: true) do %>
+		Search by car name:<br>
+		<= text_field_tag :search, params[:search], placeholder: "Enter search term" %><br><br>
+
+		<= submit_tag 'Search', class: "btn btn-dark search-btn" %>
+	< end %>
+</div-->
+
+<div id="search-results-two">
+</div>
+
+<div id="search-results-three">
+</div>
+
+<%= render partial: 'coche_datos/car_data' %>

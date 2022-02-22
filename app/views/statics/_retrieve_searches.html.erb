@@ -1,0 +1,21 @@
+<h1>Retrieve Searches</h1>
+
+<%= @hello %> <br><br>
+
+<%= @search_results_posts %>
+
+<table>
+	<thead>
+		<tr>
+			<th>The Name</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		 <% @search_results_posts.each do |coche| %>
+			<tr>
+				<td><%= coche.car %></td>
+			</tr>
+		 <% end %>
+	</tbody>
+</table>

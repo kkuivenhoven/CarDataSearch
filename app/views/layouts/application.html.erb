@@ -1,9 +1,7 @@
 <style>
 	main {
-		// margin-left: 150px;
 		margin-left: 50px;
-	}
-	
+	} 
 </style>
 
 <!DOCTYPE html>
@@ -32,7 +30,16 @@
 					<%= link_to "Ajax Search", ajax_search_coche_datos_path, class: 'nav-link' %>
 				</li>
 			 <li class="nav-item">
+					<%= link_to "Index Latest Search", index_latest_autocomplete_coche_datos_path, class: 'nav-link' %>
+				</li>
+			 <li class="nav-item">
 					<%= link_to "Test Page", test_statics_path, class: 'nav-link' %>
+				</li>
+			 <li class="nav-item">
+					<%= link_to "New Search Page", search_statics_path, class: 'nav-link' %>
+				</li>
+			 <li class="nav-item">
+					<%= link_to "Renovated Search", renovated_search_statics_path, class: 'nav-link' %>
 				</li>
 			</ul>
 		</div>
