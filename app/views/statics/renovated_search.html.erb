@@ -1,22 +1,21 @@
 <h1> Renovated Search </h1>
 
-<!--%= form_tag retrieve_searches_statics_path, remote: true, method: :post, authenticity_token: true do |f| %>
-  %= text_field_tag :search_query, params[:search], onkeyup: "$(this).parent('form').submit();"%>
- end %-->
+<div class="row">
+	<div class="col-6">
+		<div style="width: 700px;" class="border rounded bg-light">
+			
+			<div class="container" style="padding-top: 25px; padding-bottom: 60px;">
+				Search by car name:<br>
+				<input type="text" id="renovated_search" name="renovated_search" class="form-control" value=""><br>
 
-<!--%= form_tag(retrieve_searches_statics_path, method: 'post', format: :js, remote: true, :authenticity_token => true) do %>
-    %= text_field_tag 'search_query', nil, placeholder: 'search item name', onkeyup: "$(this).parent('form').submit();" %>
-    %= submit_tag "Search" %>
-< end %-->
+				Origin:<br>
+				<input type="text" id="country_origin" name="country_origin" class="form-control" value=""><br>
+			</div>
 
-<!--%= form_tag retrieve_searches_statics_path, remote: true, method: :get do %-->
-<!--%= form_tag retrieve_searches_statics_path, method: :get do %>
-	% text_field_tag :search, params[:search], onkeyup: "$(this).parent('form').submit();" %>
- end %-->
-
-<!--%= text_field_tag 'renovSearch', nil, placeholder: 'search', onkeyup: "$(#renovSearch).submit();" %-->
-
-<input type="text" id="renovated_search" name="renovated_search" class="search" value=""><br><br>
+		</div>
+	</div>
+</div>
+	
 
 <div id="blogpost-table-two">
   <table>

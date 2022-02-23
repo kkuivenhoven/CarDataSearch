@@ -2,37 +2,6 @@ class CocheDato < ApplicationRecord
 	include Elasticsearch::Model
 	include Elasticsearch::Model::Callbacks
 
-	# indexes :car
-	# indexes :car, type: :text, analyzer: :english
-	# indexes :car, type: :completion, analyzer: :english, search_analyzer: :autocomplete
-	# indexes :car, type: :completion, analyzer: :autocomplete
-=begin
-	indexes :car, type: :text, analyzer: :english do
-		indexes :keyword, type: "keyword"
-		indexes :suggest, type: "completion"
-	end
-=end
-	# settings do
-
-=begin
-	settings index: {
-    analysis: {
-      filter: {
-        autocomplete_filter: { 
-          type: 'edge_ngram',
-					min_gram: 1,
-					max_gram: 20
-        } 
-      },
-      analyzer: {
-        autocomplete: {
-          type: 'custom',
-					tokenizer: 'edge_ngram',
-          filter: ['lowercase', 'autocomplete_filter'],
-        }
-      }
-    }
-=end
 	settings index: {
 		 analysis: {
 			 analyzer: {
@@ -115,105 +84,6 @@ class CocheDato < ApplicationRecord
  			}
 		})
 	end
-=begin
- 		self.search({
- 			size: 25,
-			suggest: {
-				text: query,
-				car: {
-					term: {
-						analyzer: :standard,
-						field: :car,
-						min_word_length: 1,
-						suggest_mode: :always
-					}
-				}
-			}
- 		})
-===============
- 			query: {
-				multi_match: {
-					query: query,
-					fields: [:car]
-				}
- 			}# ,
-			suggest: {
-				text: query,
-				car: {
-					term: {
-						analyzer: :standard,
-						field: :car,
-						min_word_length: 1,
-						suggest_mode: :always
-					}
-				},
-			}
-=end
-=begin
- 		self.search({
- 			query: {
-				multi_match: {
-					query: query,
-					fields: [:car]
-				}
- 			},
-			suggest: {
-				suggestions: {
-					prefix: query,
-					completion: {
-						field: :car,
-						size: 5
-					}
-				}
-			}
- 		})
-=================
- 		self.search({
-			suggest: {
-				car: {
-					prefix: query,
-					completion: {
-						field: :car,
-						size: 5
-					}
-				}
-			}
- 		})
-=================
- 		self.search({
-			size: 25,
-			"suggest": {
-				"auto-complete-suggest": {
-					"prefix": "#{query}",
-					"completion": {
-						"size": 5,
-						"field": "car"
-					}
-				}
-			}
- 		})
-	end
-===================
- 		self.search({
- 			size: 25,
- 			query: {
-				multi_match: {
-					query: query,
-					fields: [:car]
-				}
- 			},
-			suggest: {
-				text: query,
-				car: {
-					term: {
-						size: 1,
-						field: :car
-					}
-				},
-			}
- 		})
-	end
-=end
 
 	def self.searchByCarName(query)
  		# self.suggest({
@@ -234,25 +104,6 @@ class CocheDato < ApplicationRecord
  		})
  	end
 
-=begin
-	def self.searchByCarName(query)
- 		self.search({
- 			size: 25,
- 			query: {
- 				bool: {
- 					must: [
- 					{
- 						multi_match: {
- 							query: query,
- 							fields: [:car, :model, :origin]
- 						}
- 					},
- 					]
- 				}
- 			}
- 		})
- 	end
-=end
 
 	def self.searchByCarNameMpg(query, mpg)
  		self.search({
