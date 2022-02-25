@@ -40,12 +40,13 @@ window.postGetResult = function(sendThisJson) {
 
 $(document).on('turbolinks:load', function() {
 	$('input[name="renovated_search"]').on('keyup', function(event) {
-		var newValue = $("#renovated_search").val();
+		var carNameVal = $("#renovated_search").val();
+		var originNameVal = $("#country_origin").val();
 
 		var result = null;
 		var dictionary = {};
 		var scriptUrl = "/statics/retrieve_searches";
-		var myObj = {"SearchPhrase": newValue};
+		var myObj = {"carName": carNameVal, "originName": originNameVal};
 
 		event.stopPropagation(); // need this?
 
@@ -55,6 +56,24 @@ $(document).on('turbolinks:load', function() {
 			data: new URLSearchParams(myObj).toString()
 		});
 			
+	});
+
+	$('input[name="country_origin"]').on('keyup', function(event) {
+		var carNameVal = $("#renovated_search").val();
+		var originNameVal = $("#country_origin").val();
+
+		var result = null;
+		var dictionary = {};
+		var scriptUrl = "/statics/retrieve_searches";
+		var myObj = {"carName": carNameVal, "originName": originNameVal};
+
+		event.stopPropagation(); // need this?
+
+		Rails.ajax({
+			type: "POST",
+			url: scriptUrl,
+			data: new URLSearchParams(myObj).toString()
+		});
 	});
 });
 

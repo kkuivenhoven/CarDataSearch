@@ -25,7 +25,11 @@ class StaticsController < ApplicationController
 	end
 
 	def retrieve_searches
-		@search_results_posts = CocheDato.suggestSearchCarName(params["SearchPhrase"])
+		# @search_results_posts = CocheDato.suggestSearchCarName(params["SearchPhrase"])
+		@search_results_posts = CocheDato.suggestCarNameOrigin(params["carName"], params["originName"])
+		puts "==========================="
+		puts MultiJson.dump(CocheDato.mapping.to_hash, pretty: true)
+		puts "==========================="
 		respond_to do |format|
 			format.js { render layout: false }
 		end

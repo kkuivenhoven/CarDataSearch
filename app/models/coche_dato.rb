@@ -4,6 +4,26 @@ class CocheDato < ApplicationRecord
 
 	settings index: {
 		 analysis: {
+			 filter: {
+				 # we define custom token filter with name autocomplete
+				 autocomplete: {
+					 type: :edge_ngram,
+					 min_gram: 1,
+					 max_gram: 10
+				 }# ,
+=begin
+				 whitespace_merge: {
+					 pattern: "\s+",
+					 type: :pattern_replace,
+					 replacement: " ",
+				 },
+				 edgengram: {
+					 type: :edge_ngram,
+					 min_gram: 1,
+					 max_gram: 32
+				 }
+=end
+			 },
 			 analyzer: {
 				 # we define custom analyzer with name autocomplete
 				 autocomplete: {
@@ -14,28 +34,141 @@ class CocheDato < ApplicationRecord
 					 # we apply two token filters
 					 # autocomplete filter is a custom filter that we defined above
 					 filter: %i[lowercase autocomplete]
+				 }# ,
+=begin
+				 first_word_name_analyzer: {
+					 type: :custom,
+					 tokenizer: :keyword,
+					 filter: %i[lowercase whitespace_merge edgengram]
 				 }
-			 },
-			 filter: {
-				 # we define custom token filter with name autocomplete
-				 autocomplete: {
-					 type: :edge_ngram,
-					 min_gram: 1,
-					 max_gram: 25
-				 }
+=end
 			 }
 		 }
   } do
 		mappings dynamic: false do
-			# indexes :car, type: :text, analyzer: :autocomplete_filter
-			# indexes :car, type: :text, analyzer: :english, search_analyzer: "autocomplete"
-			indexes :car, type: :text, analyzer: :autocomplete
+			# indexes :car, type: :text, analyzer: :autocomplete # WORKS ORGINAL
+			indexes :car, type: :text do
+				indexes :car, type: :text, analyzer: :autocomplete
+				# indexes :car, type: :text, analyzer: :first_word_name_analyzer
+				indexes :raw, type: :keyword #, analyzer: :keyword
+			end
 			indexes :model, type: :text, analyzer: :english
-			indexes :origin, type: :text, analyzer: :english
+			indexes :origin, type: :text, analyzer: :autocomplete
 			indexes :mpg, type: :text, analyzer: :english
 			indexes :horsepower, type: :text, analyzer: :english
 		end
 	end
+
+	def self.suggestSearchCarName(query)
+ 		self.search({
+			size: 50,
+ 			query: {
+				match: {
+					car: {
+						query: query,
+						fuzziness: 1
+					}
+				}
+ 			}
+		})
+	end
+
+	def self.suggestCarNameOrigin(query, country_origin)
+		self.search({
+			size: 100,
+			query: {
+				match: {
+					"car.car": {
+						query: query
+					}
+				}
+			}# ,
+=begin
+			sort: [
+				{
+					"car.raw": {
+						"order": "asc"
+					}
+				}
+			]
+=end
+		})
+	end
+=begin
+#############
+# WORKS (sorta)
+ 			query: {
+				bool: {
+					should: [
+					{
+						bool: {
+							should: [
+							{
+								match: {
+									car: query
+								}
+							},
+							{
+								match: {
+									origin: country_origin
+								}
+							}
+							]
+						},
+						bool: {
+							should: [
+							{
+								match_phrase: {
+									car: {
+											query: query,
+											boost: 20
+										}
+									}
+								},
+							 {
+								match_phrase: {
+									origin: {
+										query: country_origin,
+										boost: 20
+									}
+								}
+							}
+							]
+						}
+					}
+					]
+				}
+ 			}
+		})
+	end
+=end
+=begin
+						{
+							match_phrase: {
+								car: query,
+								_name: "exact_match"
+							}
+						},
+						{
+							match: {
+								origin: country_origin,
+								_name: "partial_match"
+							}
+						}
+					]
+				}
+====================
+				match_phrase: {
+					car: query
+				},
+				bool: {
+					must: [
+						match: {
+							origin: country_origin
+						}
+					]
+				}
+=end
 
 	def self.searchByCountry(country_origin)
  		self.search({
@@ -69,20 +202,6 @@ class CocheDato < ApplicationRecord
  				}
  			}
  		})
-	end
-
-	def self.suggestSearchCarName(query)
- 		self.search({
-			size: 50,
- 			query: {
-				match: {
-					car: {
-						query: query,
-						fuzziness: 1
-					}
-				}
- 			}
-		})
 	end
 
 	def self.searchByCarName(query)
