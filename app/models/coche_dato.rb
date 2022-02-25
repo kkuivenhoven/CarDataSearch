@@ -1,3 +1,8 @@
+# Resources:
+# 	• "Search as you type" - https://www.elastic.co/guide/en/elasticsearch/reference/current/search-as-you-type.html
+#   • overview of different analyzers - https://realpandablog.wordpress.com/2019/09/11/search-as-you-type-n-grams-suggesters-in-elasticsearch/
+
+
 class CocheDato < ApplicationRecord
 	include Elasticsearch::Model
 	include Elasticsearch::Model::Callbacks
@@ -9,20 +14,8 @@ class CocheDato < ApplicationRecord
 				 autocomplete: {
 					 type: :edge_ngram,
 					 min_gram: 1,
-					 max_gram: 10
-				 }# ,
-=begin
-				 whitespace_merge: {
-					 pattern: "\s+",
-					 type: :pattern_replace,
-					 replacement: " ",
-				 },
-				 edgengram: {
-					 type: :edge_ngram,
-					 min_gram: 1,
-					 max_gram: 32
+					 max_gram: 10,
 				 }
-=end
 			 },
 			 analyzer: {
 				 # we define custom analyzer with name autocomplete
@@ -34,24 +27,13 @@ class CocheDato < ApplicationRecord
 					 # we apply two token filters
 					 # autocomplete filter is a custom filter that we defined above
 					 filter: %i[lowercase autocomplete]
-				 }# ,
-=begin
-				 first_word_name_analyzer: {
-					 type: :custom,
-					 tokenizer: :keyword,
-					 filter: %i[lowercase whitespace_merge edgengram]
 				 }
-=end
 			 }
 		 }
   } do
 		mappings dynamic: false do
 			# indexes :car, type: :text, analyzer: :autocomplete # WORKS ORGINAL
-			indexes :car, type: :text do
-				indexes :car, type: :text, analyzer: :autocomplete
-				# indexes :car, type: :text, analyzer: :first_word_name_analyzer
-				indexes :raw, type: :keyword #, analyzer: :keyword
-			end
+			indexes :car, type: :search_as_you_type # works, much better
 			indexes :model, type: :text, analyzer: :english
 			indexes :origin, type: :text, analyzer: :autocomplete
 			indexes :mpg, type: :text, analyzer: :english
@@ -77,98 +59,18 @@ class CocheDato < ApplicationRecord
 		self.search({
 			size: 100,
 			query: {
-				match: {
-					"car.car": {
-						query: query
-					}
+				multi_match: {
+					query: query,
+					type: :bool_prefix,
+					fields: [
+						"car", 
+						"car._2gram", 
+						"car._3gram"
+					]
 				}
-			}# ,
-=begin
-			sort: [
-				{
-					"car.raw": {
-						"order": "asc"
-					}
-				}
-			]
-=end
+			}
 		})
 	end
-=begin
-#############
-# WORKS (sorta)
- 			query: {
-				bool: {
-					should: [
-					{
-						bool: {
-							should: [
-							{
-								match: {
-									car: query
-								}
-							},
-							{
-								match: {
-									origin: country_origin
-								}
-							}
-							]
-						},
-						bool: {
-							should: [
-							{
-								match_phrase: {
-									car: {
-											query: query,
-											boost: 20
-										}
-									}
-								},
-							 {
-								match_phrase: {
-									origin: {
-										query: country_origin,
-										boost: 20
-									}
-								}
-							}
-							]
-						}
-					}
-					]
-				}
- 			}
-		})
-	end
-=end
-=begin
-						{
-							match_phrase: {
-								car: query,
-								_name: "exact_match"
-							}
-						},
-						{
-							match: {
-								origin: country_origin,
-								_name: "partial_match"
-							}
-						}
-					]
-				}
-====================
-				match_phrase: {
-					car: query
-				},
-				bool: {
-					must: [
-						match: {
-							origin: country_origin
-						}
-					]
-				}
-=end
 
 	def self.searchByCountry(country_origin)
  		self.search({
