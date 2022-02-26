@@ -3,4 +3,5 @@ if(<%= @search_results_posts.size %> > 0) {
 	$("#current_retrieve").html("<%= escape_javascript(render partial: 'statics/retrieve_searches', locals: { search_results_posts: @search_results_posts }) %>");
 } else {
 	$("#blogpost-table-two").show();
+	$("#current_retrieve").hide();
 }
