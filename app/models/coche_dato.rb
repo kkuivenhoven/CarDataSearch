@@ -32,8 +32,16 @@ class CocheDato < ApplicationRecord
 		 }
   } do
 		mappings dynamic: false do
+      indexes :car, type: :text do
+        indexes :car, type: :text, analyzer: :autocomplete
+        indexes :car, type: :text, search_analyzer: :standard
+        # indexes :car, type: :text, analyzer: :autocomplete_two
+        # indexes :car, type: :text, analyzer: :first_word_name_analyzer
+        # indexes :raw, type: :keyword #, analyzer: :keyword
+      end
+
 			# indexes :car, type: :text, analyzer: :autocomplete # WORKS ORGINAL
-			indexes :car, type: :search_as_you_type # works, much better
+			# indexes :car, type: :search_as_you_type # works, much better
 			indexes :model, type: :text, analyzer: :english
 			indexes :origin, type: :text, analyzer: :autocomplete
 			indexes :mpg, type: :text, analyzer: :english
@@ -45,6 +53,20 @@ class CocheDato < ApplicationRecord
  		self.search({
 			size: 50,
  			query: {
+				multi_match: {
+					query: query,
+					# fuzziness: 3,
+					type: :bool_prefix,
+					fields: [
+						"car", 
+						"car._2gram", 
+						"car._3gram"
+					]
+				}
+			}
+		})
+	end
+=begin
 				match: {
 					car: {
 						query: query,
@@ -54,6 +76,7 @@ class CocheDato < ApplicationRecord
  			}
 		})
 	end
+=end
 
 	def self.suggestCarNameOrigin(query, country_origin)
 		self.search({
