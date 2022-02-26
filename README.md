@@ -1,25 +1,3 @@
-# README
+# Car Data Search
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-# CarDataSearch
+The purpose of this app is to search a (limited) database of cars from the 70's and 80's. This app utilizes Elasticsearch and allows the user to do advanced searching capabilities.
