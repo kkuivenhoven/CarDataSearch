@@ -6,6 +6,7 @@ class CocheDatosController < ApplicationController
 	def search_all_cars
 	end
 
+	# DONE
 	def noCar_noOrigin_noYear_noMpg_noHorsepower ###
     @all_cars = CocheDato.all
 		respond_to do |format|
@@ -13,6 +14,7 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
+	# DONE
 	def yesCar_noOrigin_noYear_noMpg_noHorsepower ###
     @matches = CocheDato.yesCar_noOrigin_noYear_noMpg_noHorsepower(params["carName"])
 		respond_to do |format|

@@ -22,4 +22,5 @@ import "packs/autocomplete"
 import "packs/latest_autocomplete"
 import "packs/on_key_up_search"
 import "packs/ajax_call"
+import "packs/show_mpg_horsepower_fields"
 

@@ -14,13 +14,31 @@
         Year:<br>
         <input type="text" id="year_val" name="year_val" class="form-control" value=""><br>
 
-        <input type="checkbox" id="mpg_val" name="mpg_val" class="form-control" value="">
-        Search by MPG?
+				<div class="row">
+					<div class="col-6">
+						<input type="checkbox" id="mpg_val" name="mpg_val" class="form-check-input" value="" onclick="mpgFieldsContainer();">&nbsp;Search by MPG?<br>
+					</div>
+					<div class="col-6">
+						<input type="checkbox" id="horsepower_val" name="horsepower_val" class="form-check-input" value="" onclick="horsepowerFieldsContainer();">&nbsp;Search by horsepower?<br>
+					</div>
+				</div>
 
-        <input type="checkbox" id="horsepower_val" name="horsepower_val" class="form-control" value="">
-        Search by horsepower?
-      </div>
+				<div class="row">
+					<div class="col-6">
+						<div id="mpg_fields_container">
+							MPG:&nbsp;<input type="number" id="MPG_input" min=1 max=200 class="form-control number" placerholder="0"><br>
+							MPG Two:&nbsp;<input type="number" id="MPG_two_input" min=1 max=200 class="form-control number" placerholder="0"><br>
+						</div>
+					</div>
+					<div class="col-6">
+						<div id="horsepower_fields_container">
+							Horsepower:&nbsp;<input type="number" id="horsepower_input" min=50 max=500 class="form-control number" placerholder="0"><br>
+							Horsepower Two:&nbsp;<input type="number" id="horsepower_two_input" min=50 max=500 class="form-control number" placerholder="0"><br>
+						</div>
+					</div>
+				</div>		
 
+			</div>
     </div>
   </div>
 </div>

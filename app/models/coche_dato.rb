@@ -45,7 +45,11 @@ class CocheDato < ApplicationRecord
 			indexes :model, type: :text, analyzer: :english
 			indexes :origin, type: :text, analyzer: :autocomplete
 			indexes :mpg, type: :text, analyzer: :english
-			indexes :horsepower, type: :text, analyzer: :english
+			# indexes :horsepower, type: :text, analyzer: :english
+			indexes :horsepower, type: :text do
+				indexes :horsepower, type: :text, analyzer: :autocomplete
+				indexes :horsepower, type: :text, search_analyzer: :standard
+			end
 		end
 	end
 
@@ -99,7 +103,6 @@ class CocheDato < ApplicationRecord
 
 
 
-
 	def self.noCar_noOrigin_noYear_noMpg_noHorsepower
 		# nothing to do here 
 	end
@@ -122,7 +125,21 @@ class CocheDato < ApplicationRecord
 	end
 
 
-	def self.noCar_noOrigin_noYear_noMpg_yesHorsepower
+	def self.noCar_noOrigin_noYear_noMpg_yesHorsepower(horsepower)
+		self.search({
+			size: 100,
+			query: {
+				multi_match: {
+					query: horsepower, 
+					type: :bool_prefix,
+					fields: [
+						"horsepower",
+						"horsepower._2gram",
+						"horsepower._3gram"
+					]
+				}
+			}
+		})
 	end
 
 	def self.noCar_noOrigin_noYear_yesMpg_noHorsepower
