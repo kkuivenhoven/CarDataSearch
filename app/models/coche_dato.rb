@@ -49,6 +49,8 @@ class CocheDato < ApplicationRecord
 		end
 	end
 
+
+
 	def self.suggestSearchCarName(query)
  		self.search({
 			size: 50,
@@ -94,6 +96,124 @@ class CocheDato < ApplicationRecord
 			}
 		})
 	end
+
+
+
+
+	def self.noCar_noOrigin_noYear_noMpg_noHorsepower
+		# nothing to do here 
+	end
+
+	def self.yesCar_noOrigin_noYear_noMpg_noHorsepower(carName)
+		self.search({
+			size: 100,
+			query: {
+				multi_match: {
+					query: carName,
+					type: :bool_prefix,
+					fields: [
+						"car", 
+						"car._2gram", 
+						"car._3gram"
+					]
+				}
+			}
+		})
+	end
+
+
+	def self.noCar_noOrigin_noYear_noMpg_yesHorsepower
+	end
+
+	def self.noCar_noOrigin_noYear_yesMpg_noHorsepower
+	end
+
+	def self.noCar_noOrigin_noYear_yesMpg_yesHorsepower
+	end
+
+	def self.noCar_noOrigin_yesYear_noMpg_noHorsepower
+	end
+
+	def self.noCar_noOrigin_yesYear_noMpg_yesHorsepower
+	end
+
+	def self.noCar_noOrigin_yesYear_yesMpg_noHorsepower
+	end
+
+	def self.noCar_noOrigin_yesYear_yesMpg_yesHorsepower
+	end
+
+	def self.noCar_yesOrigin_noYear_noMpg_noHorsepower
+	end
+
+	def self.noCar_yesOrigin_noYear_noMpg_yesHorsepower
+	end
+
+	def self.noCar_yesOrigin_noYear_yesMpg_noHorsepower
+	end
+
+	def self.noCar_yesOrigin_noYear_yesMpg_yesHorsepower
+	end
+
+	def self.noCar_yesOrigin_yesYear_noMpg_noHorsepower
+	end
+
+	def self.noCar_yesOrigin_yesYear_noMpg_yesHorsepower
+	end
+
+	def self.noCar_yesOrigin_yesYear_yesMpg_noHorsepower
+	end
+
+	def self.noCar_yesOrigin_yesYear_yesMpg_yesHorsepower
+	end
+
+
+	def self.yesCar_noOrigin_noYear_noMpg_yesHorsepower
+	end
+
+	def self.yesCar_noOrigin_noYear_yesMpg_noHorsepower
+	end
+
+	def self.yesCar_noOrigin_noYear_yesMpg_yesHorsepower
+	end
+
+	def self.yesCar_noOrigin_yesYear_noMpg_noHorsepower
+	end
+
+	def self.yesCar_noOrigin_yesYear_noMpg_yesHorsepower
+	end
+
+	def self.yesCar_noOrigin_yesYear_yesMpg_noHorsepower
+	end
+
+	def self.yesCar_noOrigin_yesYear_yesMpg_yesHorsepower
+	end
+
+	def self.yesCar_yesOrigin_noYear_noMpg_noHorsepower
+	end
+
+	def self.yesCar_yesOrigin_noYear_noMpg_yesHorsepower
+	end
+
+	def self.yesCar_yesOrigin_noYear_yesMpg_noHorsepower
+	end
+
+	def self.yesCar_yesOrigin_noYear_yesMpg_yesHorsepower
+	end
+
+	def self.yesCar_yesOrigin_yesYear_noMpg_noHorsepower
+	end
+
+	def self.yesCar_yesOrigin_yesYear_noMpg_yesHorsepower
+	end
+
+	def self.yesCar_yesOrigin_yesYear_yesMpg_noHorsepower
+	end
+
+	def self.yesCar_yesOrigin_yesYear_yesMpg_yesHorsepower
+	end
+
+
 
 	def self.searchByCountry(country_origin)
  		self.search({

@@ -25,11 +25,25 @@ class StaticsController < ApplicationController
 	end
 
 	def retrieve_searches
-		@search_results_posts = CocheDato.suggestSearchCarName(params["carName"])
-		# @search_results_posts = CocheDato.suggestCarNameOrigin(params["carName"], params["originName"])
+		# @search_results_posts = CocheDato.suggestSearchCarName(params["carName"])
+		@search_results_posts = CocheDato.suggestCarNameOrigin(params["carName"], params["originName"])
 		puts "==========================="
 		puts MultiJson.dump(CocheDato.mapping.to_hash, pretty: true)
 		puts "==========================="
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def post_car_name
+		@search_results_posts = CocheDato.suggestSearchCarName(params["carName"])
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_noOrigin_noYear_noMpg_noHorsepower
+		@search_results_posts = CocheDato.suggestSearchCarName(params["carName"])
 		respond_to do |format|
 			format.js { render layout: false }
 		end

@@ -6,10 +6,19 @@
 			
 			<div class="container" style="padding-top: 25px; padding-bottom: 60px;">
 				Search by car name:<br>
-				<input type="text" id="renovated_search" name="renovated_search" class="form-control" value=""><br>
+				<input type="text" id="car_name_val" name="car_name_val" class="form-control" value=""><br>
 
 				Origin:<br>
 				<input type="text" id="country_origin" name="country_origin" class="form-control" value=""><br>
+
+				Year:<br>
+				<input type="text" id="year_val" name="year_val" class="form-control" value=""><br>
+
+				<input type="checkbox" id="mpg_val" name="mpg_val" class="form-control" value="">
+				Search by MPG?
+
+				<input type="checkbox" id="horsepower_val" name="horsepower_val" class="form-control" value="">
+				Search by horsepower?
 			</div>
 
 		</div>
@@ -18,7 +27,7 @@
 	
 <div id="current_retrieve"></div>
 
-<div id="blogpost-table-two">
+<!--div id="blogpost-table-two">
   <table>
     <thead>
       <tr>
@@ -27,16 +36,16 @@
     </thead>
 
     <tbody>
-       <% @rhs_coches.each_with_index do |coche, index| %>
+       < @rhs_coches.each_with_index do |coche, index| %>
         <tr>
-          <td><%= index + 1 %>.</td>
-          <td><%= coche.car %></td>
-          <td><%= coche.origin %></td>
+          <td><= index + 1 %>.</td>
+          <td><= coche.car %></td>
+          <td><= coche.origin %></td>
         </tr>
-       <% end %>
+       < end %>
     </tbody>
   </table>
-</div>
+</div-->
 
 <!--%= text_field_tag 'renovated_search', '', remote: true %-->
 

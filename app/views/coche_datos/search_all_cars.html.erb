@@ -1,0 +1,32 @@
+<h1>Search all cars!</h1>
+
+<div class="row">
+  <div class="col-6">
+    <div style="width: 700px;" class="border rounded bg-light">
+    
+      <div class="container" style="padding-top: 25px; padding-bottom: 60px;">
+        Search by car name:<br>
+        <input type="text" id="car_name_val" name="car_name_val" class="form-control" value=""><br>
+
+        Origin:<br>
+        <input type="text" id="country_origin" name="country_origin" class="form-control" value=""><br>
+
+        Year:<br>
+        <input type="text" id="year_val" name="year_val" class="form-control" value=""><br>
+
+        <input type="checkbox" id="mpg_val" name="mpg_val" class="form-control" value="">
+        Search by MPG?
+
+        <input type="checkbox" id="horsepower_val" name="horsepower_val" class="form-control" value="">
+        Search by horsepower?
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<%= link_to 'noCar_noOrigin_noYear_noMpg_noHorsepower', noCar_noOrigin_noYear_noMpg_noHorsepower_coche_datos_path ,remote: true %>
+1. <div id="noCar_noOrigin_noYear_noMpg_noHorsepower"></div>
+
+2. <div id="yesCar_noOrigin_noYear_noMpg_noHorsepower"></div>
+

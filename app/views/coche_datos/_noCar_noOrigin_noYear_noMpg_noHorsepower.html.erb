@@ -1,0 +1,19 @@
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th>The Name</th>
+      </tr>
+    </thead>
+
+    <tbody>
+       <% @all_cars.each_with_index do |coche, index| %>
+        <tr>
+          <td><%= index + 1 %>.</td>
+          <td><%= coche.car %></td>
+          <td><%= coche.origin %></td>
+        </tr>
+       <% end %>
+    </tbody>
+  </table>
+</div>

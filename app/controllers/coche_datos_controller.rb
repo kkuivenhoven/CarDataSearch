@@ -3,6 +3,204 @@ class CocheDatosController < ApplicationController
 	# before_action :force_json, only: [:buscar_autocomplete, :buscar_latest_autocomplete]
 	before_action :force_json, only: [:buscar_autocomplete, :buscar_latest_autocomplete]
 
+	def search_all_cars
+	end
+
+	def noCar_noOrigin_noYear_noMpg_noHorsepower ###
+    @all_cars = CocheDato.all
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_noOrigin_noYear_noMpg_noHorsepower ###
+    @matches = CocheDato.yesCar_noOrigin_noYear_noMpg_noHorsepower(params["carName"])
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_noOrigin_noYear_noMpg_yesHorsepower ###
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_noOrigin_noYear_yesMpg_noHorsepower ###
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_noOrigin_noYear_yesMpg_yesHorsepower ###
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_noOrigin_yesYear_noMpg_noHorsepower ###
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_noOrigin_yesYear_noMpg_yesHorsepower ###
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_noOrigin_yesYear_yesMpg_noHorsepower ###
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_noOrigin_yesYear_yesMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_yesOrigin_noYear_noMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_yesOrigin_noYear_noMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_yesOrigin_noYear_yesMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_yesOrigin_noYear_yesMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_yesOrigin_yesYear_noMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_yesOrigin_yesYear_noMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_yesOrigin_yesYear_yesMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def noCar_yesOrigin_yesYear_yesMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_noOrigin_noYear_noMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_noOrigin_noYear_yesMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_noOrigin_noYear_yesMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_noOrigin_yesYear_noMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_noOrigin_yesYear_noMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_noOrigin_yesYear_yesMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_noOrigin_yesYear_yesMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_yesOrigin_noYear_noMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_yesOrigin_noYear_noMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_yesOrigin_noYear_yesMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_yesOrigin_noYear_yesMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_yesOrigin_yesYear_noMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_yesOrigin_yesYear_noMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_yesOrigin_yesYear_yesMpg_noHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+	def yesCar_yesOrigin_yesYear_yesMpg_yesHorsepower
+		respond_to do |format|
+			format.js { render layout: false }
+		end
+	end
+
+
 	def search
     @rhs_coches = CocheDato.all
 		if (params[:search_coche_datos].nil? == false)
