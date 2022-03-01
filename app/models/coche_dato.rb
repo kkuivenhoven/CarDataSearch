@@ -35,14 +35,8 @@ class CocheDato < ApplicationRecord
       indexes :car, type: :text do
         indexes :car, type: :text, analyzer: :autocomplete
         indexes :car, type: :text, search_analyzer: :standard
-        # indexes :car, type: :text, analyzer: :autocomplete_two
-        # indexes :car, type: :text, analyzer: :first_word_name_analyzer
-        # indexes :raw, type: :keyword #, analyzer: :keyword
       end
 
-			# indexes :car, type: :text, analyzer: :autocomplete # WORKS ORGINAL
-			# indexes :car, type: :search_as_you_type # works, much better
-			# indexes :model, type: :text, analyzer: :english
 			indexes :model, type: :text do
 				indexes :model, type: :text, analyzer: :autocomplete
 				indexes :model, type: :text, search_analyzer: :standard
@@ -287,7 +281,55 @@ class CocheDato < ApplicationRecord
 	def self.yesCar_noOrigin_noYear_yesMpg_yesHorsepower
 	end
 
-	def self.yesCar_noOrigin_yesYear_noMpg_noHorsepower
+	def self.yesCar_noOrigin_yesYear_noMpg_noHorsepower(carName, year)
+		self.search({ 
+			size: 100,
+			query: {
+				bool: {
+					must: {
+						bool: {
+							must: [
+								{
+									multi_match: {
+										query: carName,
+										type: :phrase_prefix,
+										fields: [
+											"car",
+											"car._2gram",
+											"car._3gram",
+										]
+									}
+								},
+								{
+									multi_match: {
+										query: year,
+										type: :phrase_prefix,
+										fields: [
+											"model",
+											"model._2gram",
+											"model._3gram"
+										]
+									}
+								}
+							],
+							should: [],
+							must_not: []
+						}
+					},
+					filter: {
+						bool: {
+							must: {
+								bool: {
+									must: [],
+									should: [],
+									must_not: []
+								}
+							}
+						}
+					}
+				}
+			}
+		})
 	end
 
 	def self.yesCar_noOrigin_yesYear_noMpg_yesHorsepower
