@@ -1,3 +1,10 @@
+window.checkIfTextFieldsFilledOut = function() {
+	var carNameVal = $("#car_name_val").val();
+	var originNameVal = $("#country_origin").val();
+	var yearVal = $("#year_val").val();
+
+}
+
 window.mpgFieldsContainer = function() {
   var mpgDiv = document.getElementById('mpg_fields_container');
   if(mpgDiv.style.display == 'none') {
@@ -25,8 +32,13 @@ window.hideMPGHorsepowerFields = function() {
   horsepowerDiv.style.display = 'none';
 }
 
-$(document).on('turbolinks:load', function() {
-		hideMPGHorsepowerFields();
-}); 
+window.disableCheckboxes = function() {
+	$("input.mpg_checkbox").attr("disabled", "disabled");
+	$("input.horsepower_checkbox").attr("disabled", true);
+}
 
+$(document).on('turbolinks:load', function() {
+	hideMPGHorsepowerFields();
+	// disableCheckboxes();
+}); 
 

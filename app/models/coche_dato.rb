@@ -42,14 +42,20 @@ class CocheDato < ApplicationRecord
 
 			# indexes :car, type: :text, analyzer: :autocomplete # WORKS ORGINAL
 			# indexes :car, type: :search_as_you_type # works, much better
-			indexes :model, type: :text, analyzer: :english
+			# indexes :model, type: :text, analyzer: :english
+			indexes :model, type: :text do
+				indexes :model, type: :text, analyzer: :autocomplete
+				indexes :model, type: :text, search_analyzer: :standard
+			end
 			indexes :origin, type: :text, analyzer: :autocomplete
 			indexes :mpg, type: :text, analyzer: :english
-			# indexes :horsepower, type: :text, analyzer: :english
+			indexes :horsepower, type: :text, analyzer: :english
+=begin
 			indexes :horsepower, type: :text do
 				indexes :horsepower, type: :text, analyzer: :autocomplete
 				indexes :horsepower, type: :text, search_analyzer: :standard
 			end
+=end
 		end
 	end
 
@@ -125,30 +131,44 @@ class CocheDato < ApplicationRecord
 	end
 
 
-	def self.noCar_noOrigin_noYear_noMpg_yesHorsepower(horsepower)
+	def self.noCar_noOrigin_noYear_noMpg_yesHorsepower(horsepower, horsepower_two)
+ 		self.search({
+ 			size: 100,
+ 			query: {
+				range: {
+					horsepower: {
+						gte: horsepower,
+						lte: horsepower_two,
+						boost: 2.0
+					}
+				}
+ 			}
+ 		})
+	end
+
+	# -- skip for now --
+	def self.noCar_noOrigin_noYear_yesMpg_noHorsepower
+	end
+
+	# -- skip for now --
+	def self.noCar_noOrigin_noYear_yesMpg_yesHorsepower
+	end
+
+	def self.noCar_noOrigin_yesYear_noMpg_noHorsepower(year)
 		self.search({
 			size: 100,
 			query: {
 				multi_match: {
-					query: horsepower, 
+					query: year,
 					type: :bool_prefix,
 					fields: [
-						"horsepower",
-						"horsepower._2gram",
-						"horsepower._3gram"
+						"model",
+						"model._2gram",
+						"model._3gram",
 					]
 				}
 			}
 		})
-	end
-
-	def self.noCar_noOrigin_noYear_yesMpg_noHorsepower
-	end
-
-	def self.noCar_noOrigin_noYear_yesMpg_yesHorsepower
-	end
-
-	def self.noCar_noOrigin_yesYear_noMpg_noHorsepower
 	end
 
 	def self.noCar_noOrigin_yesYear_noMpg_yesHorsepower

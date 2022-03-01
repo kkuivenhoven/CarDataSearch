@@ -38,6 +38,51 @@ window.getPostUrls = function() {
 }
 
 
+window.gatherHorsepowerInput = function(horsepowerVal) {
+	var gatheredVals = {};
+	var horsepowerLower = $("#horsepower_input").val();
+	var horsepowerHigher = $("#horsepower_two_input").val();
+	if(horsepowerVal == true) {
+		if(horsepowerHigher == 0) {
+			horsepowerHigher = "500.0";
+		}
+		if(horsepowerLower == 0) {
+			horsepowerLower = "50.0";
+		}
+		// horsepowerLower = $("#horsepower_input").val();
+		// horsepowerHigher = $("#horsepower_two_input").val();
+	} else {
+		horsepowerLower = "50.0";
+		horsepowerHigher = "500.0";
+	}
+	gatheredVals["horsepowerLower"] = horsepowerLower;
+	gatheredVals["horsepowerHigher"] = horsepowerHigher;
+	return gatheredVals;
+}
+
+window.gatherMpgInput = function(mpgVal) {
+	var gatheredVals = {};
+	var mpgLower;
+	var mpgHigher;
+	if(mpgVal == true) {
+		if(mpgHigher == 0) {
+			mpgHigher = "200";
+		}
+		if(mpgLower == 0) {
+			mpgLower = "1";
+		}
+		mpgLower = $("#mpg_input").val();
+		mpgHigher = $("#mpg_two_input").val();
+	} else {
+		mpgLower = "1";
+		mpgHigher = "200";
+	}
+	gatheredVals["mpgLower"] = mpgLower;
+	gatheredVals["mpgHigher"] = mpgHigher;
+	return gatheredVals;
+}
+
+
 window.showGetResult = function(name) {
 	var result = null;
 	var scriptUrl = "/coche_datos/buscar_latest_autocomplete.json?q=chev"; // + name;
@@ -78,14 +123,14 @@ window.postGetResult = function(sendThisJson) {
 } */
 
 
-window.whichPostUrl = function(carNameVal, originNameVal, yearVal, mpgVal, horsePowerVal) {
+window.whichPostUrl = function(carNameVal, originNameVal, yearVal, mpgVal, horsepowerVal) {
 	var lenCarName = ((carNameVal.length > 0)? '1' : '0');
 	var lenOriginName = ((originNameVal.length > 0)? '1' : '0');
 	var lenYear = ((yearVal.length > 0)? '1' : '0');
-	var lenMpg = ((mpgVal.length > 0)? '1' : '0');
-	var lenHorsePower = ((horsePowerVal.length > 0)? '1' : '0');
+	// var lenMpg = ((mpgVal.length > 0)? '1' : '0');
+	// var lenHorsePower = ((horsePowerVal.length > 0)? '1' : '0');
 
-	var digitKeyForUrl = (lenCarName + lenOriginName + lenYear + lenMpg + lenHorsePower);
+	var digitKeyForUrl = (lenCarName + lenOriginName + lenYear + mpgVal + horsepowerVal);
 	var allKeyUrls = getPostUrls();
 
 	var urlToPost = allKeyUrls[digitKeyForUrl];
@@ -100,8 +145,17 @@ $(document).on('turbolinks:load', function() {
 		var carNameVal = $("#car_name_val").val();
 		var originNameVal = $("#country_origin").val();
 		var yearVal = $("#year_val").val();
-		var mpgVal = $("#mpg_val").val();
-		var horsePowerVal = $("#horsepower_val").val();
+		var mpgVal = $("#mpg_checkbox").is(":checked");
+		var horsepowerVal = $("#horsepower_checkbox").is(":checked");
+
+		var horsepowerInputs = gatherHorsepowerInput(horsepowerVal);
+		var mpgInputs = gatherMpgInput(mpgVal);
+		var valsToSend = {"carName": carNameVal, "originName": originNameVal, "yearVal": yearVal};
+		$.extend(valsToSend,horsepowerInputs);
+		$.extend(valsToSend,mpgInputs);
+
+		mpgVal = ((mpgVal == true) ? '1' : '0');
+		horsepowerVal = ((horsepowerVal == true) ? '1' : '0');
 
 		var result = null;
 		var dictionary = {};
@@ -109,9 +163,7 @@ $(document).on('turbolinks:load', function() {
 		var myObj = {"carName": carNameVal, "originName": originNameVal};
 
 		// var scriptUrl = "/statics/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsePowerVal);
-		var scriptUrl = "/coche_datos/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsePowerVal);
-
-		// alert("originNameVal: " + (originNameVal.length));
+		var scriptUrl = "/coche_datos/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsepowerVal);
 
 		event.stopPropagation(); // need this?
 
@@ -132,8 +184,6 @@ $(document).on('turbolinks:load', function() {
 		var scriptUrl = "/statics/post_car_name";
 		var myObj = {"carName": carNameVal, "originName": originNameVal};
 
-		// alert("hello!");
-
 		event.stopPropagation(); // need this?
 
 		Rails.ajax({
@@ -142,6 +192,57 @@ $(document).on('turbolinks:load', function() {
 			data: new URLSearchParams(myObj).toString()
 		});
 	});
+
+	$('input[name="horsepower_input"]').on('keyup', function(event) {
+		var carNameVal = $("#car_name_val").val();
+		var originNameVal = $("#country_origin").val();
+		var yearVal = $("#year_val").val();
+		var mpgVal = $("#mpg_checkbox").is(":checked");
+		var horsepowerVal = $("#horsepower_checkbox").is(":checked");
+
+		var horsepowerInputs = gatherHorsepowerInput(horsepowerVal);
+		var mpgInputs = gatherMpgInput(mpgVal);
+		var valsToSend = {"carName": carNameVal, "originName": originNameVal, "yearVal": yearVal};
+		$.extend(valsToSend,horsepowerInputs);
+		$.extend(valsToSend,mpgInputs);
+
+		mpgVal = ((mpgVal == true) ? '1' : '0');
+		horsepowerVal = ((horsepowerVal == true) ? '1' : '0');
+
+		var scriptUrl = "/coche_datos/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsepowerVal);
+
+		Rails.ajax({
+			type: "POST",
+			url: scriptUrl,
+			data: new URLSearchParams(valsToSend).toString()
+		});
+	});
+
+	$('input[name="year_val"]').on('keyup', function(event) {
+		var carNameVal = $("#car_name_val").val();
+		var originNameVal = $("#country_origin").val();
+		var yearVal = $("#year_val").val();
+		var mpgVal = $("#mpg_checkbox").is(":checked");
+		var horsepowerVal = $("#horsepower_checkbox").is(":checked");
+
+		var horsepowerInputs = gatherHorsepowerInput(horsepowerVal);
+		var mpgInputs = gatherMpgInput(mpgVal);
+		var valsToSend = {"carName": carNameVal, "originName": originNameVal, "yearVal": yearVal};
+		$.extend(valsToSend,horsepowerInputs);
+		$.extend(valsToSend,mpgInputs);
+
+		mpgVal = ((mpgVal == true) ? '1' : '0');
+		horsepowerVal = ((horsepowerVal == true) ? '1' : '0');
+
+		var scriptUrl = "/coche_datos/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsepowerVal);
+
+		Rails.ajax({
+			type: "POST",
+			url: scriptUrl,
+			data: new URLSearchParams(valsToSend).toString()
+		});
+	});
+
 });
 
 

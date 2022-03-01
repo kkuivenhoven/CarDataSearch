@@ -2,13 +2,15 @@ class CocheDatosController < ApplicationController
   # before_action :set_coche_dato, only: %i[ show edit update destroy ]
 	# before_action :force_json, only: [:buscar_autocomplete, :buscar_latest_autocomplete]
 	before_action :force_json, only: [:buscar_autocomplete, :buscar_latest_autocomplete]
+	require 'bigdecimal'
+	require 'bigdecimal/util'
 
 	def search_all_cars
 	end
 
 	# DONE
 	def noCar_noOrigin_noYear_noMpg_noHorsepower ###
-    @all_cars = CocheDato.all
+    @matches = CocheDato.all
 		respond_to do |format|
 			format.js { render layout: false }
 		end
@@ -22,29 +24,40 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
+	# -- skip for now --
 	def noCar_noOrigin_noYear_noMpg_yesHorsepower ###
+		sciNotationLower = ("%.1e" % (params["horsepowerLower"].to_i))
+		sciNotationHigher = ("%.1e" % (params["horsepowerHigher"].to_i))
+    # @matches = CocheDato.noCar_noOrigin_noYear_noMpg_yesHorsepower(sciNotationLower, sciNotationHigher)
+    @matches = CocheDato.noCar_noOrigin_noYear_noMpg_yesHorsepower(params["horsepowerLower"].to_d, params["horsepowerHigher"].to_d)
+		byebug
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def noCar_noOrigin_noYear_yesMpg_noHorsepower ###
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def noCar_noOrigin_noYear_yesMpg_yesHorsepower ###
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+
 	def noCar_noOrigin_yesYear_noMpg_noHorsepower ###
+		@matches = CocheDato.noCar_noOrigin_yesYear_noMpg_noHorsepower(params["yearVal"])
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
+
 
 	def noCar_noOrigin_yesYear_noMpg_yesHorsepower ###
 		respond_to do |format|
@@ -259,6 +272,7 @@ class CocheDatosController < ApplicationController
 				@coche_datos = CocheDato.searchByHorsepowerRangeQueryCountryMpgRange(horsepower, horsepower_two, query, country_origin, mpg, mpg_two)
 			end
 		end
+
 
 =begin
 			if(mpg_checkbox == "1")

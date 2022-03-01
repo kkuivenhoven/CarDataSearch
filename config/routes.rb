@@ -9,9 +9,11 @@ Rails.application.routes.draw do
 			get :buscar_latest_autocomplete # fetches JSON data via GET request
 
 			get :search_all_cars
-			get :noCar_noOrigin_noYear_noMpg_noHorsepower ## get since no fields filled out 
+			post :noCar_noOrigin_noYear_noMpg_noHorsepower 
 			post :yesCar_noOrigin_noYear_noMpg_noHorsepower 
+
 			post :noCar_noOrigin_noYear_noMpg_yesHorsepower
+
 			post :noCar_noOrigin_noYear_yesMpg_noHorsepower
 			post :noCar_noOrigin_noYear_yesMpg_yesHorsepower
 			post :noCar_noOrigin_yesYear_noMpg_noHorsepower
