@@ -47,7 +47,13 @@ class CocheDato < ApplicationRecord
 				indexes :model, type: :text, analyzer: :autocomplete
 				indexes :model, type: :text, search_analyzer: :standard
 			end
-			indexes :origin, type: :text, analyzer: :autocomplete
+
+			# indexes :origin, type: :text, analyzer: :autocomplete
+			indexes :origin, type: :text do
+				indexes :origin, type: :text, analyzer: :autocomplete
+				indexes :origin, type: :text, search_analyzer: :standard
+			end
+
 			indexes :mpg, type: :text, analyzer: :english
 			indexes :horsepower, type: :text, analyzer: :english
 =begin
@@ -180,7 +186,21 @@ class CocheDato < ApplicationRecord
 	def self.noCar_noOrigin_yesYear_yesMpg_yesHorsepower
 	end
 
-	def self.noCar_yesOrigin_noYear_noMpg_noHorsepower
+	def self.noCar_yesOrigin_noYear_noMpg_noHorsepower(origin)
+		self.search({
+			size: 100,
+			query: {
+				multi_match: {
+					query: origin,
+					type: :bool_prefix,
+					fields: [
+						"origin",
+						"origin._2gram",
+						"origin._3gram"
+					]
+				}
+			}
+		})
 	end
 
 	def self.noCar_yesOrigin_noYear_noMpg_yesHorsepower
@@ -192,7 +212,61 @@ class CocheDato < ApplicationRecord
 	def self.noCar_yesOrigin_noYear_yesMpg_yesHorsepower
 	end
 
-	def self.noCar_yesOrigin_yesYear_noMpg_noHorsepower
+	def self.noCar_yesOrigin_yesYear_noMpg_noHorsepower(origin, year)
+		self.search({ 
+			size: 100,
+			query: {
+				bool: {
+					must: {
+						bool: {
+							must: [
+								{
+									multi_match: {
+										query: origin,
+										type: :phrase_prefix,
+										fields: [
+											"origin",
+											"origin._2gram",
+											"origin._3gram",
+											"model",
+											"model._2gram",
+											"model._3gram"
+										]
+									}
+								},
+								{
+									multi_match: {
+										query: year,
+										type: :phrase_prefix,
+										fields: [
+											"origin",
+											"origin._2gram",
+											"origin._3gram",
+											"model",
+											"model._2gram",
+											"model._3gram"
+										]
+									}
+								}
+							],
+							should: [],
+							must_not: []
+						}
+					},
+					filter: {
+						bool: {
+							must: {
+								bool: {
+									must: [],
+									should: [],
+									must_not: []
+								}
+							}
+						}
+					}
+				}
+			}
+		})
 	end
 
 	def self.noCar_yesOrigin_yesYear_noMpg_yesHorsepower
@@ -203,7 +277,6 @@ class CocheDato < ApplicationRecord
 
 	def self.noCar_yesOrigin_yesYear_yesMpg_yesHorsepower
 	end
-
 
 	def self.yesCar_noOrigin_noYear_noMpg_yesHorsepower
 	end

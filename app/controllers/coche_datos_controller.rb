@@ -50,7 +50,7 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-
+	# DONE
 	def noCar_noOrigin_yesYear_noMpg_noHorsepower ###
 		@matches = CocheDato.noCar_noOrigin_yesYear_noMpg_noHorsepower(params["yearVal"])
 		respond_to do |format|
@@ -58,97 +58,114 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-
+	# -- skip for now --
 	def noCar_noOrigin_yesYear_noMpg_yesHorsepower ###
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def noCar_noOrigin_yesYear_yesMpg_noHorsepower ###
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def noCar_noOrigin_yesYear_yesMpg_yesHorsepower
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
-	def noCar_yesOrigin_noYear_noMpg_noHorsepower
+	# DONE 
+	def noCar_yesOrigin_noYear_noMpg_noHorsepower ###
+		@matches = CocheDato.noCar_yesOrigin_noYear_noMpg_noHorsepower(params["originName"])
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
-	def noCar_yesOrigin_noYear_noMpg_yesHorsepower
+	# DONE
+	def noCar_yesOrigin_noYear_noMpg_yesHorsepower ###
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def noCar_yesOrigin_noYear_yesMpg_noHorsepower
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def noCar_yesOrigin_noYear_yesMpg_yesHorsepower
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -> in progress <-
 	def noCar_yesOrigin_yesYear_noMpg_noHorsepower
+		@matches = CocheDato.noCar_yesOrigin_yesYear_noMpg_noHorsepower(params["originName"], params["yearVal"])
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def noCar_yesOrigin_yesYear_noMpg_yesHorsepower
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def noCar_yesOrigin_yesYear_yesMpg_noHorsepower
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def noCar_yesOrigin_yesYear_yesMpg_yesHorsepower
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def yesCar_noOrigin_noYear_noMpg_yesHorsepower
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def yesCar_noOrigin_noYear_yesMpg_noHorsepower
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def yesCar_noOrigin_noYear_yesMpg_yesHorsepower
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
-	def yesCar_noOrigin_yesYear_noMpg_noHorsepower
+	# ????
+	def yesCar_noOrigin_yesYear_noMpg_noHorsepower ###
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
+	# -- skip for now --
 	def yesCar_noOrigin_yesYear_noMpg_yesHorsepower
 		respond_to do |format|
 			format.js { render layout: false }

@@ -176,12 +176,25 @@ $(document).on('turbolinks:load', function() {
 	});
 
 	$('input[name="country_origin"]').on('keyup', function(event) {
-		var carNameVal = $("#renovated_search").val();
+		var carNameVal = $("#car_name_val").val();
 		var originNameVal = $("#country_origin").val();
+		var yearVal = $("#year_val").val();
+		var mpgVal = $("#mpg_checkbox").is(":checked");
+		var horsepowerVal = $("#horsepower_checkbox").is(":checked");
+
+		var horsepowerInputs = gatherHorsepowerInput(horsepowerVal);
+		var mpgInputs = gatherMpgInput(mpgVal);
+		var valsToSend = {"carName": carNameVal, "originName": originNameVal, "yearVal": yearVal};
+		$.extend(valsToSend,horsepowerInputs);
+		$.extend(valsToSend,mpgInputs);
+
+		mpgVal = ((mpgVal == true) ? '1' : '0');
+		horsepowerVal = ((horsepowerVal == true) ? '1' : '0');
+
+		var scriptUrl = "/coche_datos/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsepowerVal);
 
 		var result = null;
 		var dictionary = {};
-		var scriptUrl = "/statics/post_car_name";
 		var myObj = {"carName": carNameVal, "originName": originNameVal};
 
 		event.stopPropagation(); // need this?
