@@ -302,12 +302,12 @@ class CocheDato < ApplicationRecord
 								},
 								{
 									multi_match: {
-										query: year,
+										query: origin,
 										type: :phrase_prefix,
 										fields: [
-											"model",
-											"model._2gram",
-											"model._3gram"
+											"origin",
+											"origin._2gram",
+											"origin._3gram"
 										]
 									}
 								}
@@ -341,10 +341,58 @@ class CocheDato < ApplicationRecord
 	def self.yesCar_noOrigin_yesYear_yesMpg_yesHorsepower
 	end
 
-	def self.yesCar_yesOrigin_noYear_noMpg_noHorsepower
+	def self.yesCar_yesOrigin_noYear_noMpg_yesHorsepower
 	end
 
-	def self.yesCar_yesOrigin_noYear_noMpg_yesHorsepower
+	def self.yesCar_yesOrigin_noYear_noMpg_noHorsepower(carName, origin)
+		self.search({ 
+			size: 100,
+			query: {
+				bool: {
+					must: {
+						bool: {
+							must: [
+								{
+									multi_match: {
+										query: carName,
+										type: :phrase_prefix,
+										fields: [
+											"car",
+											"car._2gram",
+											"car._3gram",
+										]
+									}
+								},
+								{
+									multi_match: {
+										query: origin,
+										type: :phrase_prefix,
+										fields: [
+											"origin",
+											"origin._2gram",
+											"origin._3gram"
+										]
+									}
+								}
+							],
+							should: [],
+							must_not: []
+						}
+					},
+					filter: {
+						bool: {
+							must: {
+								bool: {
+									must: [],
+									should: [],
+									must_not: []
+								}
+							}
+						}
+					}
+				}
+			}
+		})
 	end
 
 	def self.yesCar_yesOrigin_noYear_yesMpg_noHorsepower
