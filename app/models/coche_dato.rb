@@ -223,7 +223,6 @@ class CocheDato < ApplicationRecord
     }) 
 	end
 
-	# -> in progress <-
 	def self.noCar_noOrigin_yesYear_yesMpg_noHorsepower(year, mpgLower, mpgHigher)
 		self.search({
       size: 100, 
