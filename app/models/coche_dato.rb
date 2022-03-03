@@ -342,7 +342,35 @@ class CocheDato < ApplicationRecord
     }) 
 	end
 
-	def self.noCar_yesOrigin_noYear_yesMpg_noHorsepower
+	def self.noCar_yesOrigin_noYear_yesMpg_noHorsepower(origin, mpgLower, mpgHigher)
+		self.search({
+      size: 100, 
+      query: {
+        bool: {
+          must: [
+						{   
+							multi_match: {
+								query: origin,
+								fields: [
+									"origin", 
+									"origin._2gram", 
+									"origin._3gram"
+								]
+							}   
+						},  
+						{
+							range: {
+								mpg: {
+									gte: mpgLower,
+									lte: mpgHigher,
+									boost: 2.0 
+								}   
+							}
+						}
+					]
+        }
+      }
+    }) 
 	end
 
 	def self.noCar_yesOrigin_noYear_yesMpg_yesHorsepower
