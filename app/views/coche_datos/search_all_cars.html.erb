@@ -4,7 +4,7 @@
   <div class="col-6">
     <div style="width: 700px;" class="border rounded bg-light">
     
-      <div class="container" style="padding-top: 25px; padding-bottom: 60px;">
+      <div class="container search-class" style="padding-top: 25px; padding-bottom: 60px;">
         Search by car name:<br>
         <input type="text" id="car_name_val" name="car_name_val" class="form-control" value=""><br>
 
@@ -16,27 +16,21 @@
 
 				<div class="row">
 					<div class="col-6">
-						<!--input type="checkbox" id="mpg_checkbox" name="mpg_checkbox" class="form-check-input" value="" onclick="mpgFieldsContainer();">&nbsp;Search by MPG?<br-->
-						<input type="checkbox" id="mpg_checkbox" name="mpg_checkbox" class="form-check-input" value="" disabled onclick="checkIfTextFieldsFilledOut();">&nbsp;Search by MPG?<br>
+						<input type="checkbox" id="mpg_checkbox" name="mpg_checkbox" class="form-check-input" value="" onclick="mpgFieldsContainer();">&nbsp;Search by MPG?<br>
 					</div>
 					<div class="col-6">
-						<!--input type="checkbox" id="horsepower_checkbox" name="horsepower_checkbox" class="form-check-input" value="" onclick="horsepowerFieldsContainer();">&nbsp;Search by horsepower?<br-->
-						<input type="checkbox" id="horsepower_checkbox" name="horsepower_checkbox" class="form-check-input" value="" disabled onclick="checkIfTextFieldsFilledOut();">&nbsp;Search by horsepower?<br>
+						<input type="checkbox" id="horsepower_checkbox" name="horsepower_checkbox" class="form-check-input" value="" onclick="horsepowerFieldsContainer();">&nbsp;Search by horsepower?<br>
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-6">
-						<div id="mpg_fields_container">
-							MPG:&nbsp;<input type="number" id="MPG_input" name="MPG_two_input" min=1 max=200 class="form-control number" placerholder="0"><br>
+					<div class="col-6" id="mpg_fields_container">
+							MPG:&nbsp;<input type="number" id="MPG_input" name="MPG_input" min=1 max=200 class="form-control number" placerholder="0"><br>
 							MPG Two:&nbsp;<input type="number" id="MPG_two_input" name="MPG_two_input" min=1 max=200 class="form-control number" placerholder="0"><br>
-						</div>
 					</div>
-					<div class="col-6">
-						<div id="horsepower_fields_container">
+					<div class="col-6" id="horsepower_fields_container">
 							Horsepower:&nbsp;<input type="number" id="horsepower_input" name="horsepower_input" min=50 max=500 class="form-control number" placerholder="0"><br>
 							Horsepower Two:&nbsp;<input type="number" id="horsepower_two_input" name="horsepower_two_input" min=50 max=500 class="form-control number" placerholder="0"><br>
-						</div>
 					</div>
 				</div>		
 
@@ -45,20 +39,20 @@
   </div>
 </div>
 
-<%= link_to 'noCar_noOrigin_noYear_noMpg_noHorsepower', noCar_noOrigin_noYear_noMpg_noHorsepower_coche_datos_path ,remote: true %>
+<div id="noCar_noOrigin_noYear_noMpg_noHorsepower"></div>
 
-1. <div id="noCar_noOrigin_noYear_noMpg_noHorsepower"></div>
+<div id="yesCar_noOrigin_noYear_noMpg_noHorsepower"></div>
 
-2. <div id="yesCar_noOrigin_noYear_noMpg_noHorsepower"></div>
+<div id="noCar_noOrigin_noYear_noMpg_yesHorsepower"></div>
 
-3. <div id="noCar_noOrigin_noYear_noMpg_yesHorsepower"></div>
+<div id="noCar_noOrigin_yesYear_noMpg_noHorsepower"></div>
 
-4. <div id="noCar_noOrigin_yesYear_noMpg_noHorsepower"></div>
+<div id="noCar_yesOrigin_noYear_noMpg_noHorsepower"></div>
 
-5. <div id="noCar_yesOrigin_noYear_noMpg_noHorsepower"></div>
+<div id="noCar_yesOrigin_yesYear_noMpg_noHorsepower"></div>
 
-6. <div id="noCar_yesOrigin_yesYear_noMpg_noHorsepower"></div>
+<div id="yesCar_noOrigin_yesYear_noMpg_noHorsepower"></div>
 
-7. <div id="yesCar_noOrigin_yesYear_noMpg_noHorsepower"></div>
+<div id="yesCar_yesOrigin_noYear_noMpg_noHorsepower"></div>
 
-8. <div id="yesCar_yesOrigin_noYear_noMpg_noHorsepower"></div>
+<div id="noCar_noOrigin_noYear_yesMpg_noHorsepower"></div>

@@ -42,14 +42,22 @@ class CocheDato < ApplicationRecord
 				indexes :model, type: :text, search_analyzer: :standard
 			end
 
-			# indexes :origin, type: :text, analyzer: :autocomplete
 			indexes :origin, type: :text do
 				indexes :origin, type: :text, analyzer: :autocomplete
 				indexes :origin, type: :text, search_analyzer: :standard
 			end
 
-			indexes :mpg, type: :text, analyzer: :english
+			indexes :mpg, type: :double
+			# indexes :mpg, type: :text, analyzer: :english
+=begin
+			indexes :mpg, type: :text do
+				indexes :mpg, type: :text, analyzer: :autocomplete
+				indexes :mpg, type: :text, search_analyzer: :standard
+			end
+=end
+
 			indexes :horsepower, type: :text, analyzer: :english
+
 =begin
 			indexes :horsepower, type: :text do
 				indexes :horsepower, type: :text, analyzer: :autocomplete
@@ -146,8 +154,20 @@ class CocheDato < ApplicationRecord
  		})
 	end
 
-	# -- skip for now --
-	def self.noCar_noOrigin_noYear_yesMpg_noHorsepower
+	# -> in progress <-
+	def self.noCar_noOrigin_noYear_yesMpg_noHorsepower(lowerMpg, higherMpg)
+		self.search({
+			size: 400,
+			query: {
+				range: {
+					mpg: {
+						gte: lowerMpg,
+						lte: higherMpg,
+						relation: :intersects
+					}
+				}
+ 			}
+ 		})
 	end
 
 	# -- skip for now --
@@ -773,7 +793,7 @@ class CocheDato < ApplicationRecord
 
 	def self.searchByMpgRange(mpg, mpg_two)
  		self.search({
- 			size: 25,
+ 			size: 400,
  			query: {
 				range: {
 					mpg: {
