@@ -7,17 +7,10 @@ window.checkIfTextFieldsFilledOut = function() {
 
 window.mpgFieldsContainer = function() {
   var mpgDiv = document.getElementById('mpg_fields_container');
-  // var mpgInputOne = document.getElementById('MPG_input');
-  // var mpgInputTwo = document.getElementById('MPG_two_input');
   if(mpgDiv.style.display == 'none') {
-  // if(mpgInputOne.style.display == 'none') {
     mpgDiv.style.display = 'block';
-    // mpgInputOne.style.display = 'block';
-    // mpgInputTwo.style.display = 'block';
   } else {
     mpgDiv.style.display = 'none';
-    // mpgInputOne.style.display = 'none';
-    // mpgInputTwo.style.display = 'none';
   }
 }
 
@@ -33,10 +26,6 @@ window.horsepowerFieldsContainer = function() {
 window.hideMPGHorsepowerFields = function() {
   var mpgDiv = document.getElementById('mpg_fields_container');
   mpgDiv.style.display = 'none';
-  // var mpgInputOne = document.getElementById('MPG_input');
-  // var mpgInputTwo = document.getElementById('MPG_two_input');
-	// mpgInputOne.style.display = 'none';
-	// mpgInputTwo.style.display = 'none';
 
   var horsepowerDiv = document.getElementById('horsepower_fields_container');
   horsepowerDiv.style.display = 'none';
@@ -54,11 +43,11 @@ $(document).on('turbolinks:load', function() {
 		hideMPGHorsepowerFields();
 		// disableCheckboxes();
 
-		/* var scriptUrl = "/coche_datos/noCar_noOrigin_noYear_noMpg_noHorsepower"
+		var scriptUrl = "/coche_datos/noCar_noOrigin_noYear_noMpg_noHorsepower"
 		Rails.ajax({
 			type: "POST",
 			url: scriptUrl,
-		}); */
+		});
 	}
 }); 
 

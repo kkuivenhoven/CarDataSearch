@@ -383,9 +383,9 @@ class CocheDato < ApplicationRecord
 										query: year,
 										type: :phrase_prefix,
 										fields: [
-											"origin",
-											"origin._2gram",
-											"origin._3gram"
+											"model",
+											"model._2gram",
+											"model._3gram"
 										]
 									}
 								}
