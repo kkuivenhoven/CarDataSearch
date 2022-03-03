@@ -191,7 +191,7 @@ class CocheDato < ApplicationRecord
 		})
 	end
 
-	# -> in progress <-
+	# DONE
 	def self.noCar_noOrigin_yesYear_noMpg_yesHorsepower(year, horsepowerLower, horsepowerHigher)
 		self.search({
       size: 100, 
@@ -223,7 +223,36 @@ class CocheDato < ApplicationRecord
     }) 
 	end
 
-	def self.noCar_noOrigin_yesYear_yesMpg_noHorsepower
+	# -> in progress <-
+	def self.noCar_noOrigin_yesYear_yesMpg_noHorsepower(year, mpgLower, mpgHigher)
+		self.search({
+      size: 100, 
+      query: {
+        bool: {
+          must: [
+						{   
+							multi_match: {
+								query: year,
+								fields: [
+									"model", 
+									"model._2gram", 
+									"model._3gram"
+								]
+							}   
+						},  
+						{
+							range: {
+								mpg: {
+									gte: mpgLower,
+									lte: mpgHigher,
+									boost: 2.0 
+								}   
+							}
+						}
+					]
+        }
+      }
+    }) 
 	end
 
 	def self.noCar_noOrigin_yesYear_yesMpg_yesHorsepower
@@ -351,7 +380,7 @@ class CocheDato < ApplicationRecord
 								},
 								{
 									multi_match: {
-										query: origin,
+										query: year,
 										type: :phrase_prefix,
 										fields: [
 											"origin",
@@ -462,8 +491,9 @@ class CocheDato < ApplicationRecord
 	def self.yesCar_yesOrigin_yesYear_yesMpg_yesHorsepower
 	end
 
+end
 
-
+=begin
 	def self.searchByCountry(country_origin)
  		self.search({
  			size: 25,
@@ -648,7 +678,7 @@ class CocheDato < ApplicationRecord
  						match: {
  							model: model
  						}
- 					},
+ 					}# ,
  					]
  				}
  			}
@@ -670,7 +700,7 @@ class CocheDato < ApplicationRecord
 						match: {
 							model: model	
  						}
- 					},
+ 					}# ,
  					]
  				}
  			}
@@ -787,7 +817,7 @@ class CocheDato < ApplicationRecord
 						match: {
 							origin: country_origin	
  						}
- 					},
+ 					} #,
  					]
  				}
  			}
@@ -974,3 +1004,5 @@ class CocheDato < ApplicationRecord
 	end
 
 end
+=end
+

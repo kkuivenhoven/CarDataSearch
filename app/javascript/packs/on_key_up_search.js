@@ -159,14 +159,10 @@ $(document).on('turbolinks:load', function() {
 
 		var scriptUrl = "/coche_datos/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsepowerVal);
 
-		var result = null;
-		var dictionary = {};
-		var myObj = {"carName": carNameVal, "originName": originNameVal};
-
 		Rails.ajax({
 			type: "POST",
 			url: scriptUrl,
-			data: new URLSearchParams(myObj).toString()
+			data: new URLSearchParams(valsToSend).toString()
 		});
 	});
 

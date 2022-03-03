@@ -2,69 +2,67 @@ class CocheDatosController < ApplicationController
   # before_action :set_coche_dato, only: %i[ show edit update destroy ]
 	# before_action :force_json, only: [:buscar_autocomplete, :buscar_latest_autocomplete]
 	before_action :force_json, only: [:buscar_autocomplete, :buscar_latest_autocomplete]
-	require 'bigdecimal'
-	require 'bigdecimal/util'
 
 	def search_all_cars
 	end
 
-	# DONE
+	# DONE •••
 	def noCar_noOrigin_noYear_noMpg_noHorsepower ###
     @matches = CocheDato.all
 		respond_to do |format|
-			format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE
+	# DONE •••
 	def yesCar_noOrigin_noYear_noMpg_noHorsepower ###
     @matches = CocheDato.yesCar_noOrigin_noYear_noMpg_noHorsepower(params["carName"])
 		respond_to do |format|
-			format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE
+	# DONE •••
 	def noCar_noOrigin_noYear_noMpg_yesHorsepower ###
     @matches = CocheDato.noCar_noOrigin_noYear_noMpg_yesHorsepower(params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
-			format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE
+	# DONE •••
 	def noCar_noOrigin_noYear_yesMpg_noHorsepower ###
 		@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_noHorsepower(params["mpgLower"], params["mpgHigher"])
 		respond_to do |format|
-			format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE
+	# DONE •••
 	def noCar_noOrigin_noYear_yesMpg_yesHorsepower ###
 		@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_yesHorsepower(params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
-			format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE
+	# DONE •••
 	def noCar_noOrigin_yesYear_noMpg_noHorsepower ###
 		@matches = CocheDato.noCar_noOrigin_yesYear_noMpg_noHorsepower(params["yearVal"])
 		respond_to do |format|
-			format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
+		end
+	end
+
+	# DONE •••
+	def noCar_noOrigin_yesYear_noMpg_yesHorsepower ###
+		@matches = CocheDato.noCar_noOrigin_yesYear_noMpg_yesHorsepower(params["yearVal"], params["horsepowerLower"], params["horsepowerHigher"])
+		respond_to do |format|
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
 	# -> in progress <-
-	def noCar_noOrigin_yesYear_noMpg_yesHorsepower ###
-		@matches = CocheDato.noCar_noOrigin_yesYear_noMpg_yesHorsepower(params["yearVal"], params["horsepowerLower"], params["horsepowerHigher"])
-		respond_to do |format|
-			format.js { render layout: false }
-		end
-	end
-
-	# -- skip for now --
 	def noCar_noOrigin_yesYear_yesMpg_noHorsepower ###
 		respond_to do |format|
 			format.js { render layout: false }
@@ -78,11 +76,11 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE 
+	# DONE •••
 	def noCar_yesOrigin_noYear_noMpg_noHorsepower ###
 		@matches = CocheDato.noCar_yesOrigin_noYear_noMpg_noHorsepower(params["originName"])
 		respond_to do |format|
-			format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
@@ -107,11 +105,12 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE
+	# DONE •••
 	def noCar_yesOrigin_yesYear_noMpg_noHorsepower ###
 		@matches = CocheDato.noCar_yesOrigin_yesYear_noMpg_noHorsepower(params["originName"], params["yearVal"])
 		respond_to do |format|
-			format.js { render layout: false }
+			# format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
@@ -161,7 +160,8 @@ class CocheDatosController < ApplicationController
 	def yesCar_noOrigin_yesYear_noMpg_noHorsepower ### 
 		@matches = CocheDato.yesCar_noOrigin_yesYear_noMpg_noHorsepower(params["carName"], params["yearVal"])
 		respond_to do |format|
-			format.js { render layout: false }
+			# format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
@@ -190,7 +190,8 @@ class CocheDatosController < ApplicationController
 	def yesCar_yesOrigin_noYear_noMpg_noHorsepower ###
 		@matches = CocheDato.yesCar_yesOrigin_noYear_noMpg_noHorsepower(params["carName"], params["originName"])
 		respond_to do |format|
-			format.js { render layout: false }
+			# format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 

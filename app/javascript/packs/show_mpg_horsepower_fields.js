@@ -48,8 +48,18 @@ window.disableCheckboxes = function() {
 }
 
 $(document).on('turbolinks:load', function() {
-	hideMPGHorsepowerFields();
-	// disableCheckboxes();
+	var curUrl = $(location).attr("pathname");
+
+	if(curUrl == "/coche_datos/search_all_cars") {
+		hideMPGHorsepowerFields();
+		// disableCheckboxes();
+
+		/* var scriptUrl = "/coche_datos/noCar_noOrigin_noYear_noMpg_noHorsepower"
+		Rails.ajax({
+			type: "POST",
+			url: scriptUrl,
+		}); */
+	}
 }); 
 
 
