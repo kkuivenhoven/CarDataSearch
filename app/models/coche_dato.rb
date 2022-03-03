@@ -198,25 +198,28 @@ class CocheDato < ApplicationRecord
       query: {
         bool: {
           must: [
-          {   
-            multi_match: {
-              query: year,
-              fields: [
-								"model", 
-								"model._2gram", 
-								"model._3gram"
-							]
-            }   
-          },  
-            range: {
-              horsepower: {
-                gte: horsepowerLower,
-                lte: horsepowerHigher,
-                boost: 2.0 
-              }   
-          }]  
-        }   
-      }   
+						{   
+							multi_match: {
+								query: year,
+								fields: [
+									"model", 
+									"model._2gram", 
+									"model._3gram"
+								]
+							}   
+						},  
+						{
+							range: {
+								horsepower: {
+									gte: horsepowerLower,
+									lte: horsepowerHigher,
+									boost: 2.0 
+								}   
+							}
+						}
+					]
+        }
+      }
     }) 
 	end
 
