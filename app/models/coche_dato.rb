@@ -440,12 +440,8 @@ class CocheDato < ApplicationRecord
 										query: year,
 										type: :phrase_prefix,
 										fields: [
-											"origin",
-											"origin._2gram",
-											"origin._3gram",
-											"model",
-											"model._2gram",
-											"model._3gram"
+											"origin", "origin._2gram", "origin._3gram",
+											"model", "model._2gram", "model._3gram"
 										]
 									}
 								}
@@ -483,22 +479,14 @@ class CocheDato < ApplicationRecord
 									multi_match: {
 										query: origin,
 										type: :phrase_prefix,
-										fields: [
-											"origin",
-											"origin._2gram",
-											"origin._3gram",
-										]
+										fields: ["origin", "origin._2gram", "origin._3gram"]
 									}
 								},
 								{
 									multi_match: {
 										query: year,
 										type: :phrase_prefix,
-										fields: [
-											"model",
-											"model._2gram",
-											"model._3gram"
-										]
+										fields: ["model", "model._2gram", "model._3gram"]
 									}
 								},
 								{
@@ -543,22 +531,14 @@ class CocheDato < ApplicationRecord
 									multi_match: {
 										query: origin,
 										type: :phrase_prefix,
-										fields: [
-											"origin",
-											"origin._2gram",
-											"origin._3gram",
-										]
+										fields: ["origin", "origin._2gram", "origin._3gram"]
 									}
 								},
 								{
 									multi_match: {
 										query: year,
 										type: :phrase_prefix,
-										fields: [
-											"model",
-											"model._2gram",
-											"model._3gram"
-										]
+										fields: ["model", "model._2gram", "model._3gram"]
 									}
 								},
 								{
@@ -569,7 +549,7 @@ class CocheDato < ApplicationRecord
 											boost: 2.0 
 										}   
 									}
-								}, 
+								}
 							],
 							should: [],
 							must_not: []
@@ -591,7 +571,65 @@ class CocheDato < ApplicationRecord
 		})
 	end
 
-	def self.noCar_yesOrigin_yesYear_yesMpg_yesHorsepower
+	def self.noCar_yesOrigin_yesYear_yesMpg_yesHorsepower(origin, year, mpgLower, mpgHigher, horsepowerLower, horsepowerHigher)
+		self.search({ 
+			size: 100,
+			query: {
+				bool: {
+					must: {
+						bool: {
+							must: [
+								{
+									multi_match: {
+										query: origin,
+										type: :phrase_prefix,
+										fields: ["origin", "origin._2gram", "origin._3gram"]
+									}
+								},
+								{
+									multi_match: {
+										query: year,
+										type: :phrase_prefix,
+										fields: ["model", "model._2gram", "model._3gram"]
+									}
+								},
+								{
+									range: {
+										mpg: {
+											gte: mpgLower,
+											lte: mpgHigher,
+											boost: 2.0 
+										}   
+									}
+								},
+								{
+									range: {
+										horsepower: {
+											gte: horsepowerLower,
+											lte: horsepowerHigher,
+											boost: 2.0 
+										}   
+									}
+								} 
+							],
+							should: [],
+							must_not: []
+						}
+					},
+					filter: {
+						bool: {
+							must: {
+								bool: {
+									must: [],
+									should: [],
+									must_not: []
+								}
+							}
+						}
+					}
+				}
+			}
+		})
 	end
 
 	def self.yesCar_noOrigin_noYear_noMpg_yesHorsepower
