@@ -470,7 +470,65 @@ class CocheDato < ApplicationRecord
 		})
 	end
 
-	def self.noCar_yesOrigin_yesYear_noMpg_yesHorsepower
+	# -> in progress <-
+	def self.noCar_yesOrigin_yesYear_noMpg_yesHorsepower(origin, year, horsepowerLower, horsepowerHigher)
+		self.search({ 
+			size: 100,
+			query: {
+				bool: {
+					must: {
+						bool: {
+							must: [
+								{
+									multi_match: {
+										query: origin,
+										type: :phrase_prefix,
+										fields: [
+											"origin",
+											"origin._2gram",
+											"origin._3gram",
+										]
+									}
+								},
+								{
+									multi_match: {
+										query: year,
+										type: :phrase_prefix,
+										fields: [
+											"model",
+											"model._2gram",
+											"model._3gram"
+										]
+									}
+								},
+								{
+									range: {
+										horsepower: {
+											gte: horsepowerLower,
+											lte: horsepowerHigher,
+											boost: 2.0 
+										}   
+									}
+								}, 
+							],
+							should: [],
+							must_not: []
+						}
+					},
+					filter: {
+						bool: {
+							must: {
+								bool: {
+									must: [],
+									should: [],
+									must_not: []
+								}
+							}
+						}
+					}
+				}
+			}
+		})
 	end
 
 	def self.noCar_yesOrigin_yesYear_yesMpg_noHorsepower
