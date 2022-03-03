@@ -24,12 +24,9 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# -- skip for now --
+	# DONE
 	def noCar_noOrigin_noYear_noMpg_yesHorsepower ###
-		sciNotationLower = ("%.1e" % (params["horsepowerLower"].to_i))
-		sciNotationHigher = ("%.1e" % (params["horsepowerHigher"].to_i))
-    # @matches = CocheDato.noCar_noOrigin_noYear_noMpg_yesHorsepower(sciNotationLower, sciNotationHigher)
-    @matches = CocheDato.noCar_noOrigin_noYear_noMpg_yesHorsepower(params["horsepowerLower"].to_d, params["horsepowerHigher"].to_d)
+    @matches = CocheDato.noCar_noOrigin_noYear_noMpg_yesHorsepower(params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
 			format.js { render layout: false }
 		end

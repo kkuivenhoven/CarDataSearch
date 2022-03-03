@@ -48,22 +48,7 @@ class CocheDato < ApplicationRecord
 			end
 
 			indexes :mpg, type: :double
-			# indexes :mpg, type: :text, analyzer: :english
-=begin
-			indexes :mpg, type: :text do
-				indexes :mpg, type: :text, analyzer: :autocomplete
-				indexes :mpg, type: :text, search_analyzer: :standard
-			end
-=end
-
-			indexes :horsepower, type: :text, analyzer: :english
-
-=begin
-			indexes :horsepower, type: :text do
-				indexes :horsepower, type: :text, analyzer: :autocomplete
-				indexes :horsepower, type: :text, search_analyzer: :standard
-			end
-=end
+			indexes :horsepower, type: :double
 		end
 	end
 
@@ -75,7 +60,6 @@ class CocheDato < ApplicationRecord
  			query: {
 				multi_match: {
 					query: query,
-					# fuzziness: 3,
 					type: :bool_prefix,
 					fields: [
 						"car", 
@@ -86,17 +70,6 @@ class CocheDato < ApplicationRecord
 			}
 		})
 	end
-=begin
-				match: {
-					car: {
-						query: query,
-						fuzziness: 1
-					}
-				}
- 			}
-		})
-	end
-=end
 
 	def self.suggestCarNameOrigin(query, country_origin)
 		self.search({
@@ -141,13 +114,13 @@ class CocheDato < ApplicationRecord
 
 	def self.noCar_noOrigin_noYear_noMpg_yesHorsepower(horsepower, horsepower_two)
  		self.search({
- 			size: 100,
+ 			size: 400,
  			query: {
 				range: {
 					horsepower: {
 						gte: horsepower,
 						lte: horsepower_two,
-						boost: 2.0
+						relation: :intersects
 					}
 				}
  			}

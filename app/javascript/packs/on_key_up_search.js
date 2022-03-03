@@ -40,31 +40,28 @@ window.getPostUrls = function() {
 
 window.gatherHorsepowerInput = function(horsepowerVal) {
 	var gatheredVals = {};
-	var horsepowerLower = $("#horsepower_input").val();
-	var horsepowerHigher = $("#horsepower_two_input").val();
-	if(horsepowerVal == true) {
-		if(horsepowerHigher == 0) {
-			horsepowerHigher = "500.0";
+	$("#horsepower_fields_container").find('input[type="number"]').each(function(index, elem){
+		if(elem.name == "horsepower_input") {
+			if(elem.value.length == 0) {
+				gatheredVals["horsepowerLower"] = "50";
+			} else {
+				gatheredVals["horsepowerLower"] = elem.value;
+			}
+		} 
+		if(elem.name == "horsepower_two_input") {
+			if(elem.value.length == 0) {
+				gatheredVals["horsepowerHigher"] = "500";
+			} else {
+				gatheredVals["horsepowerHigher"] = elem.value;
+			}
 		}
-		if(horsepowerLower == 0) {
-			horsepowerLower = "50.0";
-		}
-		// horsepowerLower = $("#horsepower_input").val();
-		// horsepowerHigher = $("#horsepower_two_input").val();
-	} else {
-		horsepowerLower = "50.0";
-		horsepowerHigher = "500.0";
-	}
-	gatheredVals["horsepowerLower"] = horsepowerLower;
-	gatheredVals["horsepowerHigher"] = horsepowerHigher;
-	return gatheredVals;
+	});
+	return gatheredVals; 
 }
 
 window.gatherMpgInput = function(mpgVal) {
 	var gatheredVals = {};
 	$("#mpg_fields_container").find('input[type="number"]').each(function(index, elem){
-		// alert(" elem.name: " + elem.name + " --- elem.value: " + elem.value);
-		// gatheredVals[elem.name] = elem.value;
 		if(elem.name == "MPG_input") {
 			if(elem.value.length == 0) {
 				gatheredVals["mpgLower"] = "1";
@@ -81,32 +78,6 @@ window.gatherMpgInput = function(mpgVal) {
 		}
 	});
 	return gatheredVals; 
-		
-	/* var gatheredVals = {};
-	var mpgLower;
-	var mpgHigher;
-	if(mpgVal == true) {
-		mpgLower = $("#mpg_input").val();
-		mpgHigher = $("#mpg_two_input").val();
-		mpgHigherTest = $(this).parents("#mpg_two_input").val();
-		// if(mpgHigher == 0) {
-		if(mpgHigher === undefined) {
-			mpgHigher = "60";
-		}
-		// if(mpgLower == 0) {
-		if(mpgLower === undefined) {
-			mpgLower = "1";
-		}
-		// alert("mpgLower: " + mpgLower);
-		// alert("mpgHigher: " + mpgHigher);
-		alert("mpgHigherTest: " + mpgHigherTest);
-	} else {
-		mpgLower = "1";
-		mpgHigher = "60";
-	} 
-	gatheredVals["mpgLower"] = mpgLower;
-	gatheredVals["mpgHigher"] = mpgHigher;
-	return gatheredVals; */
 }
 
 
@@ -125,44 +96,16 @@ window.showGetResult = function(name) {
 	return result;	
 }
 
-/*
-window.postGetResult = function(sendThisJson) {
-	var result = null;
-	var dictionary = {};
-	// dictionary["SearchResults"] = sendThisJson;
-	// var scriptUrl = "/statics/execute_search";
-	var scriptUrl = "/statics/retrieve_searches";
-  var myObj = {"name":"John", "age":30, "car":null};
-
-	console.log("send this json: " + sendThisJson);
-		
-	$.ajax({
-		type: 'POST',
-		url: scriptUrl,
-		dataType: 'JSON',
-		data: myObj, 
-		async: false,
-	  success: function(data) {
-			result = "success";
-		}
-	});
-	return result;
-} */
-
 
 window.whichPostUrl = function(carNameVal, originNameVal, yearVal, mpgVal, horsepowerVal) {
 	var lenCarName = ((carNameVal.length > 0)? '1' : '0');
 	var lenOriginName = ((originNameVal.length > 0)? '1' : '0');
 	var lenYear = ((yearVal.length > 0)? '1' : '0');
-	// var lenMpg = ((mpgVal.length > 0)? '1' : '0');
-	// var lenHorsePower = ((horsePowerVal.length > 0)? '1' : '0');
 
 	var digitKeyForUrl = (lenCarName + lenOriginName + lenYear + mpgVal + horsepowerVal);
 	var allKeyUrls = getPostUrls();
 
 	var urlToPost = allKeyUrls[digitKeyForUrl];
-
-	// alert(" url to post: " + urlToPost);
 	return urlToPost;
 }
 
@@ -186,13 +129,9 @@ $(document).on('turbolinks:load', function() {
 
 		var result = null;
 		var dictionary = {};
-		// var scriptUrl = "/statics/retrieve_searches";
 		var myObj = {"carName": carNameVal, "originName": originNameVal};
 
-		// var scriptUrl = "/statics/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsePowerVal);
 		var scriptUrl = "/coche_datos/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsepowerVal);
-
-		event.stopPropagation(); // need this?
 
 		Rails.ajax({
 			type: "POST",
@@ -224,8 +163,6 @@ $(document).on('turbolinks:load', function() {
 		var dictionary = {};
 		var myObj = {"carName": carNameVal, "originName": originNameVal};
 
-		event.stopPropagation(); // need this?
-
 		Rails.ajax({
 			type: "POST",
 			url: scriptUrl,
@@ -234,6 +171,31 @@ $(document).on('turbolinks:load', function() {
 	});
 
 	$('input[name="horsepower_input"]').on('keyup', function(event) {
+		var carNameVal = $("#car_name_val").val();
+		var originNameVal = $("#country_origin").val();
+		var yearVal = $("#year_val").val();
+		var mpgVal = $("#mpg_checkbox").is(":checked");
+		var horsepowerVal = $("#horsepower_checkbox").is(":checked");
+
+		var horsepowerInputs = gatherHorsepowerInput(horsepowerVal);
+		var mpgInputs = gatherMpgInput(mpgVal);
+		var valsToSend = {"carName": carNameVal, "originName": originNameVal, "yearVal": yearVal};
+		$.extend(valsToSend,horsepowerInputs);
+		$.extend(valsToSend,mpgInputs);
+
+		mpgVal = ((mpgVal == true) ? '1' : '0');
+		horsepowerVal = ((horsepowerVal == true) ? '1' : '0');
+
+		var scriptUrl = "/coche_datos/" + whichPostUrl(carNameVal, originNameVal, yearVal, mpgVal, horsepowerVal);
+
+		Rails.ajax({
+			type: "POST",
+			url: scriptUrl,
+			data: new URLSearchParams(valsToSend).toString()
+		});
+	});
+
+	$('input[name="horsepower_two_input"]').on('keyup', function(event) {
 		var carNameVal = $("#car_name_val").val();
 		var originNameVal = $("#country_origin").val();
 		var yearVal = $("#year_val").val();
@@ -312,7 +274,6 @@ $(document).on('turbolinks:load', function() {
 	});
 
 	$('input[name="MPG_two_input"]').on('keyup', function(event) {
-	// $("#mpg_checkbox").click(function() {
 		if($("#mpg_checkbox").is(':checked') == true) {
 			var carNameVal = $("#car_name_val").val();
 			var originNameVal = $("#country_origin").val();
