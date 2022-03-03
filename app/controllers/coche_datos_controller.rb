@@ -118,7 +118,7 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# -> in progress <-
+	# DONE •••
 	def noCar_yesOrigin_yesYear_noMpg_yesHorsepower
 		@matches = CocheDato.noCar_yesOrigin_yesYear_noMpg_yesHorsepower(params["originName"], params["yearVal"], params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
@@ -126,10 +126,11 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# -- skip for now --
+	# DONE •••
 	def noCar_yesOrigin_yesYear_yesMpg_noHorsepower
+		@matches = CocheDato.noCar_yesOrigin_yesYear_yesMpg_noHorsepower(params["originName"], params["yearVal"], params["mpgLower"], params["mpgHigher"])
 		respond_to do |format|
-			format.js { render layout: false }
+			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
