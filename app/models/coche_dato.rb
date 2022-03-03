@@ -154,7 +154,7 @@ class CocheDato < ApplicationRecord
  		})
 	end
 
-	# -> in progress <-
+	# DONE
 	def self.noCar_noOrigin_noYear_yesMpg_noHorsepower(lowerMpg, higherMpg)
 		self.search({
 			size: 400,

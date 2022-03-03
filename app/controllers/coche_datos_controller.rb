@@ -35,7 +35,7 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# -> in progress <-
+	# DONE
 	def noCar_noOrigin_noYear_yesMpg_noHorsepower ###
 		@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_noHorsepower(params["mpgLower"], params["mpgHigher"]).sort_by(&:mpg)
 		respond_to do |format|
