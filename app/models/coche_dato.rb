@@ -143,7 +143,7 @@ class CocheDato < ApplicationRecord
  		})
 	end
 
-	# -> in progress <-
+	# DONE
 	def self.noCar_noOrigin_noYear_yesMpg_yesHorsepower(lowerMpg, higherMpg, lowerHorsepower, higherHorsepower)
     self.search({
       size: 100, 
@@ -191,7 +191,33 @@ class CocheDato < ApplicationRecord
 		})
 	end
 
-	def self.noCar_noOrigin_yesYear_noMpg_yesHorsepower
+	# -> in progress <-
+	def self.noCar_noOrigin_yesYear_noMpg_yesHorsepower(year, horsepowerLower, horsepowerHigher)
+		self.search({
+      size: 100, 
+      query: {
+        bool: {
+          must: [
+          {   
+            multi_match: {
+              query: year,
+              fields: [
+								"model", 
+								"model._2gram", 
+								"model._3gram"
+							]
+            }   
+          },  
+            range: {
+              horsepower: {
+                gte: horsepowerLower,
+                lte: horsepowerHigher,
+                boost: 2.0 
+              }   
+          }]  
+        }   
+      }   
+    }) 
 	end
 
 	def self.noCar_noOrigin_yesYear_yesMpg_noHorsepower

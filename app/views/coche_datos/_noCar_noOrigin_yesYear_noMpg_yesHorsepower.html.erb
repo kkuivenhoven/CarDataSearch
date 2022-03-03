@@ -1,2 +1,31 @@
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Car</th>
+        <th>Model</th>
+        <th>MPG</th>
+        <th>Cylinders</th>
+        <th>Horsepower</th>
+        <th>Weight</th>
+        <th>Origin</th>
+      </tr>
+    </thead>
 
-<h6> noCar_noOrigin_yesYear_noMpg_yesHorsepower</h6>
+    <tbody>
+       <% @matches.each_with_index do |coche, index| %>
+        <tr>
+          <td><%= index + 1 %>.</td>
+          <td><%= coche.car %></td>
+          <td><%= coche.model %></td>
+          <td><%= coche.mpg %></td>
+          <td><%= coche.cylinders %></td>
+          <td><%= coche.horsepower %></td>
+          <td><%= coche.weight %></td>
+          <td><%= coche.origin %></td>
+        </tr>
+       <% end %>
+    </tbody>
+  </table>
+</div>
