@@ -143,8 +143,35 @@ class CocheDato < ApplicationRecord
  		})
 	end
 
-	# -- skip for now --
-	def self.noCar_noOrigin_noYear_yesMpg_yesHorsepower
+	# -> in progress <-
+	def self.noCar_noOrigin_noYear_yesMpg_yesHorsepower(lowerMpg, higherMpg, lowerHorsepower, higherHorsepower)
+    self.search({
+      size: 100, 
+      query: {
+				bool: {
+					must: [
+						{
+							range: {
+								mpg: {
+									gte: lowerMpg,
+									lte: higherMpg,
+									relation: :intersects
+								}   
+							}  
+						},
+						{
+							range: {
+								horsepower: {
+									gte: lowerHorsepower,
+									lte: higherHorsepower,
+									relation: :intersects
+								}   
+							}   
+						}   
+					]
+				}
+			}   
+    }) 
 	end
 
 	def self.noCar_noOrigin_yesYear_noMpg_noHorsepower(year)

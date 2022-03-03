@@ -34,14 +34,15 @@ class CocheDatosController < ApplicationController
 
 	# DONE
 	def noCar_noOrigin_noYear_yesMpg_noHorsepower ###
-		@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_noHorsepower(params["mpgLower"], params["mpgHigher"]).sort_by(&:mpg)
+		@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_noHorsepower(params["mpgLower"], params["mpgHigher"])
 		respond_to do |format|
 			format.js { render layout: false }
 		end
 	end
 
-	# -- skip for now --
+	# -> in progress <-
 	def noCar_noOrigin_noYear_yesMpg_yesHorsepower ###
+		@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_yesHorsepower(params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
 			format.js { render layout: false }
 		end
