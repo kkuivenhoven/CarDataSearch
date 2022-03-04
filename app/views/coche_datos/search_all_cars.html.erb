@@ -1,36 +1,44 @@
-<h1>Search all cars!</h1>
+<!--h1>Search all cars!</h1-->
 
-<div class="row">
+<div class="row search_form_row">
   <div class="col-6">
     <div style="width: 700px;" class="border rounded bg-light">
     
       <div class="container search-class" style="padding-top: 25px; padding-bottom: 60px;">
-        Search by car name:<br>
+        <span class="search_form_text">Search by car name:</span><br>
         <input type="text" id="car_name_val" name="car_name_val" class="form-control" value=""><br>
 
-        Origin:<br>
+        <span class="search_form_text">Origin:</span><br>
         <input type="text" id="country_origin" name="country_origin" class="form-control" value=""><br>
 
-        Year:<br>
+        <span class="search_form_text">Year:</span><br>
         <input type="text" id="year_val" name="year_val" class="form-control" value=""><br>
 
 				<div class="row">
 					<div class="col-6">
-						<input type="checkbox" id="mpg_checkbox" name="mpg_checkbox" class="form-check-input" value="" onclick="mpgFieldsContainer();">&nbsp;Search by MPG?<br>
+						<input type="checkbox" id="mpg_checkbox" name="mpg_checkbox" class="form-check-input" value="" onclick="mpgFieldsContainer();">
+						&nbsp;<span class="search_form_text">Search by MPG range?</span><br>
 					</div>
 					<div class="col-6">
-						<input type="checkbox" id="horsepower_checkbox" name="horsepower_checkbox" class="form-check-input" value="" onclick="horsepowerFieldsContainer();">&nbsp;Search by horsepower?<br>
+						<input type="checkbox" id="horsepower_checkbox" name="horsepower_checkbox" class="form-check-input" value="" onclick="horsepowerFieldsContainer();">
+						&nbsp;<span class="search_form_text">Search by horsepower range?</span><br>
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="col-6" id="mpg_fields_container">
-							MPG:&nbsp;<input type="number" id="MPG_input" name="MPG_input" min=1 max=200 class="form-control number" placerholder="0"><br>
-							MPG Two:&nbsp;<input type="number" id="MPG_two_input" name="MPG_two_input" min=1 max=200 class="form-control number" placerholder="0"><br>
+							<span class="search_form_text">MPG (lower bound):</span>&nbsp;
+							<input type="number" id="MPG_input" name="MPG_input" min=1 max=200 class="form-control number" placerholder="0"><br>
+
+							<span class="search_form_text">MPG (upper bound):</span>&nbsp;
+							<input type="number" id="MPG_two_input" name="MPG_two_input" min=1 max=200 class="form-control number" placerholder="0"><br>
 					</div>
 					<div class="col-6" id="horsepower_fields_container">
-							Horsepower:&nbsp;<input type="number" id="horsepower_input" name="horsepower_input" min=50 max=500 class="form-control number" placerholder="0"><br>
-							Horsepower Two:&nbsp;<input type="number" id="horsepower_two_input" name="horsepower_two_input" min=50 max=500 class="form-control number" placerholder="0"><br>
+							<span class="search_form_text">Horsepower (lower bound):</span>&nbsp;
+							<input type="number" id="horsepower_input" name="horsepower_input" min=50 max=500 class="form-control number" placerholder="0"><br>
+
+							<span class="search_form_text">Horsepower (upper bound):</span>&nbsp;
+							<input type="number" id="horsepower_two_input" name="horsepower_two_input" min=50 max=500 class="form-control number" placerholder="0"><br>
 					</div>
 				</div>		
 
@@ -40,6 +48,7 @@
 </div>
 
 
-<div id="display_car_data"></div>
-
+<div class="row car_data_div_row">
+	<div id="display_car_data"></div>
+</div>
 
