@@ -4,9 +4,11 @@ class CocheDatosController < ApplicationController
 	before_action :force_json, only: [:buscar_autocomplete, :buscar_latest_autocomplete]
 
 	def search_all_cars
+		puts "==========================="
+		puts MultiJson.dump(CocheDato.mapping.to_hash, pretty: true)
+		puts "==========================="
 	end
 
-	# DONE •••
 	def noCar_noOrigin_noYear_noMpg_noHorsepower ###
     @matches = CocheDato.all
 		respond_to do |format|
@@ -14,7 +16,6 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
 	def yesCar_noOrigin_noYear_noMpg_noHorsepower ###
     @matches = CocheDato.yesCar_noOrigin_noYear_noMpg_noHorsepower(params["carName"])
 		respond_to do |format|
@@ -22,7 +23,6 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
 	def noCar_noOrigin_noYear_noMpg_yesHorsepower ###
     @matches = CocheDato.noCar_noOrigin_noYear_noMpg_yesHorsepower(params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
@@ -30,23 +30,36 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
+	# FIXED 
 	def noCar_noOrigin_noYear_yesMpg_noHorsepower ###
-		@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_noHorsepower(params["mpgLower"], params["mpgHigher"])
+		if(params.key?("mpgLower"))
+			@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_noHorsepower(params["mpgLower"], params["mpgHigher"], nil)
+		end
+		if(params.key?("mpgExact"))
+			@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_noHorsepower(nil, nil, params["mpgExact"])
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE •••
+	# FIXED
 	def noCar_noOrigin_noYear_yesMpg_yesHorsepower ###
-		@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_yesHorsepower(params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		# @matches = CocheDato.noCar_noOrigin_noYear_yesMpg_yesHorsepower(params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		if(params.key?("mpgLower") && params.key?("horsepowerLower"))
+			@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_yesHorsepower(params["mpgLower"], params["mpgHigher"], nil, params["horsepowerLower"], params["horsepowerHigher"], nil)
+		elsif(params.key?("mpgLower") && params.key?("horsepowerExact"))
+			@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_yesHorsepower(params["mpgLower"], params["mpgHigher"], nil, nil, nil, params["horsepowerExact"])
+		elsif(params.key?("mpgExact") && params.key?("horsepowerLower"))
+			@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_yesHorsepower(nil, nil, params["mpgExact"], params["horsepowerLower"], params["horsepowerHigher"], nil)
+		elsif(params.key?("mpgExact") && params.key?("horsepowerExact"))
+			@matches = CocheDato.noCar_noOrigin_noYear_yesMpg_yesHorsepower(nil, nil, params["mpgExact"], nil, nil, params["horsepowerExact"])
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE •••
 	def noCar_noOrigin_yesYear_noMpg_noHorsepower ###
 		@matches = CocheDato.noCar_noOrigin_yesYear_noMpg_noHorsepower(params["yearVal"])
 		respond_to do |format|
@@ -54,7 +67,6 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
 	def noCar_noOrigin_yesYear_noMpg_yesHorsepower ###
 		@matches = CocheDato.noCar_noOrigin_yesYear_noMpg_yesHorsepower(params["yearVal"], params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
@@ -62,23 +74,36 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
+	# FIXED
 	def noCar_noOrigin_yesYear_yesMpg_noHorsepower ###
-		@matches = CocheDato.noCar_noOrigin_yesYear_yesMpg_noHorsepower(params["yearVal"], params["mpgLower"], params["mpgHigher"])
+		if(params.key?("mpgLower"))
+			@matches = CocheDato.noCar_noOrigin_yesYear_yesMpg_noHorsepower(params["yearVal"], params["mpgLower"], params["mpgHigher"], nil)
+		end
+		if(params.key?("mpgExact"))
+			@matches = CocheDato.noCar_noOrigin_yesYear_yesMpg_noHorsepower(params["yearVal"], nil, nil, params["mpgExact"])
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE •••
+	# FIXED
 	def noCar_noOrigin_yesYear_yesMpg_yesHorsepower
-		@matches = CocheDato.noCar_noOrigin_yesYear_yesMpg_yesHorsepower(params["yearVal"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		# @matches = CocheDato.noCar_noOrigin_yesYear_yesMpg_yesHorsepower(params["yearVal"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		if(params.key?("mpgLower") && params.key?("horsepowerLower"))
+			@matches = CocheDato.noCar_noOrigin_yesYear_yesMpg_yesHorsepower(params["yearVal"], params["mpgLower"], params["mpgHigher"], nil, params["horsepowerLower"], params["horsepowerHigher"], nil)
+		elsif(params.key?("mpgLower") && params.key?("horsepowerExact"))
+			@matches = CocheDato.noCar_noOrigin_yesYear_yesMpg_yesHorsepower(params["yearVal"], params["mpgLower"], params["mpgHigher"], nil, nil, nil, params["horsepowerExact"])
+		elsif(params.key?("mpgExact") && params.key?("horsepowerLower"))
+			@matches = CocheDato.noCar_noOrigin_yesYear_yesMpg_yesHorsepower(params["yearVal"], nil, nil, params["mpgExact"], params["horsepowerLower"], params["horsepowerHigher"], nil)
+		elsif(params.key?("mpgExact") && params.key?("horsepowerExact"))
+			@matches = CocheDato.noCar_noOrigin_yesYear_yesMpg_yesHorsepower(params["yearVal"], nil, nil, params["mpgExact"], nil, nil, params["horsepowerExact"])
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false }
 		end
 	end
 
-	# DONE •••
 	def noCar_yesOrigin_noYear_noMpg_noHorsepower ###
 		@matches = CocheDato.noCar_yesOrigin_noYear_noMpg_noHorsepower(params["originName"])
 		respond_to do |format|
@@ -86,7 +111,6 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
 	def noCar_yesOrigin_noYear_noMpg_yesHorsepower ###
 		@matches = CocheDato.noCar_yesOrigin_noYear_noMpg_yesHorsepower(params["originName"], params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
@@ -94,23 +118,35 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
+	# FIXED
 	def noCar_yesOrigin_noYear_yesMpg_noHorsepower
-		@matches = CocheDato.noCar_yesOrigin_noYear_yesMpg_noHorsepower(params["originName"], params["mpgLower"], params["mpgHigher"])
+		if(params.key?("mpgLower"))
+			@matches = CocheDato.noCar_yesOrigin_noYear_yesMpg_noHorsepower(params["originName"], params["mpgLower"], params["mpgHigher"], nil)
+		end
+		if(params.key?("mpgExact"))
+			@matches = CocheDato.noCar_yesOrigin_noYear_yesMpg_noHorsepower(params["originName"], nil, nil, params["mpgExact"])
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false }
 		end
 	end
 
-	# DONE •••
+	# fix
 	def noCar_yesOrigin_noYear_yesMpg_yesHorsepower
 		@matches = CocheDato.noCar_yesOrigin_noYear_yesMpg_yesHorsepower(params["originName"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		if(params.key?("mpgLower") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgLower") && params.key?("horsepowerExact"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerExact"))
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false }
 		end
 	end
 
-	# DONE •••
 	def noCar_yesOrigin_yesYear_noMpg_noHorsepower ###
 		@matches = CocheDato.noCar_yesOrigin_yesYear_noMpg_noHorsepower(params["originName"], params["yearVal"])
 		respond_to do |format|
@@ -118,31 +154,35 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
-	def noCar_yesOrigin_yesYear_noMpg_yesHorsepower
-		@matches = CocheDato.noCar_yesOrigin_yesYear_noMpg_yesHorsepower(params["originName"], params["yearVal"], params["horsepowerLower"], params["horsepowerHigher"])
-		respond_to do |format|
-			format.js { render template: "coche_datos/display_car_data", layout: false}
-		end
-	end
-
-	# DONE •••
+	# FIXED
 	def noCar_yesOrigin_yesYear_yesMpg_noHorsepower
-		@matches = CocheDato.noCar_yesOrigin_yesYear_yesMpg_noHorsepower(params["originName"], params["yearVal"], params["mpgLower"], params["mpgHigher"])
+		if(params.key?("mpgLower"))
+			@matches = CocheDato.noCar_yesOrigin_yesYear_yesMpg_noHorsepower(params["originName"], params["yearVal"], params["mpgLower"], params["mpgHigher"], nil)
+		end
+		if(params.key?("mpgExact"))
+			@matches = CocheDato.noCar_yesOrigin_yesYear_yesMpg_noHorsepower(params["originName"], params["yearVal"], nil, nil, params["mpgExact"])
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE •••
+	# fix
 	def noCar_yesOrigin_yesYear_yesMpg_yesHorsepower
 		@matches = CocheDato.noCar_yesOrigin_yesYear_yesMpg_yesHorsepower(params["originName"], params["yearVal"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		if(params.key?("mpgLower") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgLower") && params.key?("horsepowerExact"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerExact"))
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE •••
 	def yesCar_noOrigin_noYear_noMpg_yesHorsepower 
 		@matches = CocheDato.yesCar_noOrigin_noYear_noMpg_yesHorsepower(params["carName"], params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
@@ -150,7 +190,7 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
+	# fix
 	def yesCar_noOrigin_noYear_yesMpg_noHorsepower
 		@matches = CocheDato.yesCar_noOrigin_noYear_yesMpg_noHorsepower(params["carName"], params["mpgLower"], params["mpgHigher"])
 		respond_to do |format|
@@ -158,15 +198,22 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	#  DONE •••
+	# fix
 	def yesCar_noOrigin_noYear_yesMpg_yesHorsepower
+		if(params.key?("mpgLower") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgLower") && params.key?("horsepowerExact"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerExact"))
+		end
 		@matches = CocheDato.yesCar_noOrigin_noYear_yesMpg_yesHorsepower(params["carName"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE •••
 	def yesCar_noOrigin_yesYear_noMpg_noHorsepower ### 
 		@matches = CocheDato.yesCar_noOrigin_yesYear_noMpg_noHorsepower(params["carName"], params["yearVal"])
 		respond_to do |format|
@@ -174,7 +221,6 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
 	def yesCar_noOrigin_yesYear_noMpg_yesHorsepower
 		@matches = CocheDato.yesCar_noOrigin_yesYear_noMpg_yesHorsepower(params["carName"], params["yearVal"], params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
@@ -182,7 +228,7 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	#  DONE •••
+	# fix
 	def yesCar_noOrigin_yesYear_yesMpg_noHorsepower
 		@matches = CocheDato.yesCar_noOrigin_yesYear_yesMpg_noHorsepower(params["carName"], params["yearVal"], params["mpgLower"], params["mpgHigher"])
 		respond_to do |format|
@@ -190,15 +236,23 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
+	# fix
 	def yesCar_noOrigin_yesYear_yesMpg_yesHorsepower
-		@matches = CocheDato.yesCar_noOrigin_yesYear_yesMpg_yesHorsepower(params["carName"], params["yearVal"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		# @matches = CocheDato.yesCar_noOrigin_yesYear_yesMpg_yesHorsepower(params["carName"], params["yearVal"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		if(params.key?("mpgLower") && params.key?("horsepowerLower"))
+			@matches = CocheDato.yesCar_noOrigin_yesYear_yesMpg_yesHorsepower(params["carName"], params["yearVal"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		end
+		if(params.key?("mpgLower") && params.key?("horsepowerExact"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerExact"))
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE •••
 	def yesCar_yesOrigin_noYear_noMpg_noHorsepower ###
 		@matches = CocheDato.yesCar_yesOrigin_noYear_noMpg_noHorsepower(params["carName"], params["originName"])
 		respond_to do |format|
@@ -206,7 +260,7 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
+	# fix
 	def yesCar_yesOrigin_noYear_yesMpg_noHorsepower
 		@matches = CocheDato.yesCar_yesOrigin_noYear_yesMpg_noHorsepower(params["carName"], params["originName"], params["mpgLower"], params["mpgHigher"])
 		respond_to do |format|
@@ -214,15 +268,22 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
+	# fix
 	def yesCar_yesOrigin_noYear_yesMpg_yesHorsepower
 		@matches = CocheDato.yesCar_yesOrigin_noYear_yesMpg_yesHorsepower(params["carName"], params["originName"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		if(params.key?("mpgLower") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgLower") && params.key?("horsepowerExact"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerExact"))
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end
 	end
 
-	# DONE •••
 	def yesCar_yesOrigin_yesYear_noMpg_noHorsepower
 		@matches = CocheDato.yesCar_yesOrigin_yesYear_noMpg_noHorsepower(params["carName"], params["originName"], params["yearVal"])
 		respond_to do |format|
@@ -230,7 +291,6 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
 	def yesCar_yesOrigin_yesYear_noMpg_yesHorsepower
 		@matches = CocheDato.yesCar_yesOrigin_yesYear_noMpg_yesHorsepower(params["carName"], params["originName"], params["yearVal"], params["horsepowerLower"], params["horsepowerHigher"])
 		respond_to do |format|
@@ -238,7 +298,7 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
+	# fix
 	def yesCar_yesOrigin_yesYear_yesMpg_noHorsepower
 		@matches = CocheDato.yesCar_yesOrigin_yesYear_yesMpg_noHorsepower(params["carName"], params["originName"], params["yearVal"], params["mpgLower"], params["mpgHigher"])
 		respond_to do |format|
@@ -246,9 +306,17 @@ class CocheDatosController < ApplicationController
 		end
 	end
 
-	# DONE •••
+	# fix
 	def yesCar_yesOrigin_yesYear_yesMpg_yesHorsepower
 		@matches = CocheDato.yesCar_yesOrigin_yesYear_yesMpg_yesHorsepower(params["carName"], params["originName"], params["yearVal"], params["mpgLower"], params["mpgHigher"], params["horsepowerLower"], params["horsepowerHigher"])
+		if(params.key?("mpgLower") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgLower") && params.key?("horsepowerExact"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerLower"))
+		end
+		if(params.key?("mpgExact") && params.key?("horsepowerExact"))
+		end
 		respond_to do |format|
 			format.js { render template: "coche_datos/display_car_data", layout: false}
 		end

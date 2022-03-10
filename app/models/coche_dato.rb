@@ -47,8 +47,21 @@ class CocheDato < ApplicationRecord
 				indexes :origin, type: :text, search_analyzer: :standard
 			end
 
-			indexes :mpg, type: :double
-			indexes :horsepower, type: :double
+			indexes :mpg, type: :text do
+				indexes "numeric", type: :double
+				# indexes "text", type: :text, analyzer: :autocomplete
+				# indexes "text", type: :text, search_analyzer: :standard
+				indexes "text", type: :text, analyzer: :autocomplete
+				indexes "text", type: :text, search_analyzer: :standard
+			end
+
+			# indexes :horsepower, type: :double
+			indexes :horsepower, type: :text do
+				indexes "numeric", type: :double
+				indexes "text", type: :text, analyzer: :autocomplete
+				indexes "text", type: :text, search_analyzer: :standard
+			end
+
 		end
 	end
 
@@ -127,51 +140,179 @@ class CocheDato < ApplicationRecord
  		})
 	end
 
-	# DONE
-	def self.noCar_noOrigin_noYear_yesMpg_noHorsepower(lowerMpg, higherMpg)
-		self.search({
-			size: 400,
-			query: {
-				range: {
-					mpg: {
-						gte: lowerMpg,
-						lte: higherMpg,
-						relation: :intersects
+	 
+	def self.noCar_noOrigin_noYear_yesMpg_noHorsepower(lowerMpg = nil, higherMpg = nil, exactMpg = nil)
+		if(lowerMpg.nil? == false)
+			self.search({
+				size: 400,
+				query: {
+					range: {
+						"mpg.numeric": {
+							gte: lowerMpg, 
+							lte: higherMpg,
+							relation: :intersects
+						}
 					}
 				}
- 			}
- 		})
+			})
+		elsif(exactMpg.nil? == false)
+			self.search({
+				size: 100,
+				query: {
+					multi_match: {
+						query: exactMpg,
+						type: :bool_prefix,
+						fields: [
+							"mpg", 
+							"mpg._2gram", 
+							"mpg._3gram"
+						]
+					}
+				}
+			})
+		end
 	end
 
-	# DONE
-	def self.noCar_noOrigin_noYear_yesMpg_yesHorsepower(lowerMpg, higherMpg, lowerHorsepower, higherHorsepower)
-    self.search({
-      size: 100, 
-      query: {
-				bool: {
-					must: [
-						{
-							range: {
-								mpg: {
-									gte: lowerMpg,
-									lte: higherMpg,
-									relation: :intersects
-								}   
-							}  
-						},
-						{
-							range: {
-								horsepower: {
-									gte: lowerHorsepower,
-									lte: higherHorsepower,
-									relation: :intersects
-								}   
-							}   
-						}   
-					]
+	 
+	def self.noCar_noOrigin_noYear_yesMpg_yesHorsepower(lowerMpg = nil, higherMpg = nil, exactMPG = nil, lowerHorsepower = nil, higherHorsepower = nil, exactHorsepower = nil)
+    if((lowerMpg.nil? == false) && (lowerHorsepower.nil? == false))
+      self.search({
+        size: 100, 
+        query: {
+          bool: {
+            must: [
+              {
+                range: {
+                  "mpg.numeric": {
+                    gte: lowerMpg,
+                    lte: higherMpg,
+                    relation: :intersects
+                  }   
+                }  
+              },
+              {
+                range: {
+                  "horsepower.numeric": {
+                    gte: lowerHorsepower,
+                    lte: higherHorsepower,
+                    relation: :intersects
+                  }   
+                }   
+              }   
+            ]
+          }
+        }   
+      }) 
+		elsif((lowerMpg.nil? == false) && (exactHorsepower.nil? == false))
+			self.search({
+				size: 100, 
+				query: {
+					bool: {
+						must: [
+							{
+								multi_match: {
+									query: exactHorsepower,
+									type: :bool_prefix,
+									fields: [
+										"horsepower", 
+										"horsepower._2gram", 
+										"horsepower._3gram"
+									]
+								}
+							},  
+							{
+								range: {
+									"mpg.numeric": {
+										gte: lowerMpg,
+										lte: higherMpg,
+										boost: 2.0 
+									}   
+								}
+							}
+						]
+					}
 				}
-			}   
-    }) 
+			})
+		elsif((exactMPG.nil? == false) && (lowerHorsepower.nil? == false))
+			self.search({
+				size: 100, 
+				query: {
+					bool: {
+						must: [
+							{
+								multi_match: {
+									query: exactMPG,
+									type: :bool_prefix,
+									fields: [
+										"mpg", 
+										"mpg._2gram", 
+										"mpg._3gram"
+									]
+								}
+							},  
+							{
+								range: {
+									"horsepower.numeric": {
+										gte: lowerHorsepower,
+										lte: higherHorsepower,
+										boost: 2.0 
+									}   
+								}
+							}
+						]
+					}
+				}
+			})
+		elsif((exactMPG.nil? == false) && (exactHorsepower.nil? == false))
+			self.search({ 
+				size: 100,
+				query: {
+					bool: {
+						must: {
+							bool: {
+								must: [
+									{
+										multi_match: {
+											query: exactHorsepower,
+											type: :phrase_prefix,
+											fields: [
+												"horsepower",
+												"horsepower._2gram",
+												"horsepower._3gram",
+											]
+										}
+									},
+									{
+										multi_match: {
+											query: exactMPG,
+											type: :phrase_prefix,
+											fields: [
+												"mpg",
+												"mpg._2gram",
+												"mpg._3gram"
+											]
+										}
+									}
+								],
+								should: [],
+								must_not: []
+							}
+						},
+						filter: {
+							bool: {
+								must: {
+									bool: {
+										must: [],
+										should: [],
+										must_not: []
+									}
+								}
+							}
+						}
+					}
+				}
+			})
+		end
 	end
 
 	def self.noCar_noOrigin_yesYear_noMpg_noHorsepower(year)
@@ -191,7 +332,7 @@ class CocheDato < ApplicationRecord
 		})
 	end
 
-	# DONE
+	 
 	def self.noCar_noOrigin_yesYear_noMpg_yesHorsepower(year, horsepowerLower, horsepowerHigher)
 		self.search({
       size: 100, 
@@ -223,75 +364,304 @@ class CocheDato < ApplicationRecord
     }) 
 	end
 
-	def self.noCar_noOrigin_yesYear_yesMpg_noHorsepower(year, mpgLower, mpgHigher)
-		self.search({
-      size: 100, 
-      query: {
-        bool: {
-          must: [
-						{   
-							multi_match: {
-								query: year,
-								fields: [
-									"model", 
-									"model._2gram", 
-									"model._3gram"
-								]
-							}   
-						},  
-						{
-							range: {
-								mpg: {
-									gte: mpgLower,
-									lte: mpgHigher,
-									boost: 2.0 
+	def self.noCar_noOrigin_yesYear_yesMpg_noHorsepower(year, mpgLower = nil, mpgHigher = nil, exactMPG = nil)
+		if(mpgLower.nil? == false)
+			self.search({
+				size: 100, 
+				query: {
+					bool: {
+						must: [
+							{   
+								multi_match: {
+									query: year,
+									fields: [
+										"model", 
+										"model._2gram", 
+										"model._3gram"
+									]
 								}   
+							},  
+							{
+								range: {
+									"mpg.numeric": {
+										gte: mpgLower,
+										lte: mpgHigher,
+										boost: 2.0 
+									}   
+								}
+							}
+						]
+					}
+				}
+			}) 
+		elsif(exactMPG.nil? == false)
+			self.search({ 
+				size: 100,
+				query: {
+					bool: {
+						must: {
+							bool: {
+								must: [
+									{
+										multi_match: {
+											query: year,
+											type: :phrase_prefix,
+											fields: [
+												"model",
+												"model._2gram",
+												"model._3gram",
+											]
+										}
+									},
+									{
+										multi_match: {
+											query: exactMPG,
+											type: :phrase_prefix,
+											fields: [
+												"mpg",
+												"mpg._2gram",
+												"mpg._3gram"
+											]
+										}
+									}
+								],
+								should: [],
+								must_not: []
+							}
+						},
+						filter: {
+							bool: {
+								must: {
+									bool: {
+										must: [],
+										should: [],
+										must_not: []
+									}
+								}
 							}
 						}
-					]
-        }
-      }
-    }) 
+					}
+				}
+			})
+		end
 	end
 
-	def self.noCar_noOrigin_yesYear_yesMpg_yesHorsepower(year, mpgLower, mpgHigher, horsepowerLower, horsepowerHigher)
-		self.search({
-      size: 100, 
-      query: {
-        bool: {
-          must: [
-						{   
-							multi_match: {
-								query: year,
-								fields: [
-									"model", 
-									"model._2gram", 
-									"model._3gram"
-								]
-							}   
-						},  
-						{
-							range: {
-								mpg: {
-									gte: mpgLower,
-									lte: mpgHigher,
-									boost: 2.0 
+	def self.noCar_noOrigin_yesYear_yesMpg_yesHorsepower(year, mpgLower = nil, mpgHigher = nil, mpgExact = nil, horsepowerLower = nil, horsepowerHigher = nil, horsepowerExact = nil)
+    if((mpgLower.nil? == false) && (horsepowerLower.nil? == false))
+			self.search({
+				size: 100, 
+				query: {
+					bool: {
+						must: [
+							{   
+								multi_match: {
+									query: year,
+									fields: [
+										"model", 
+										"model._2gram", 
+										"model._3gram"
+									]
 								}   
+							},  
+							{
+								range: {
+									mpg: {
+										gte: mpgLower,
+										lte: mpgHigher,
+										boost: 2.0 
+									}   
+								}
+							}, 
+							{
+								range: {
+									horsepower: {
+										gte: horsepowerLower,
+										lte: horsepowerHigher,
+										boost: 2.0 
+									}   
+								}
+							} 
+						]
+					}
+				}
+			}) 
+		elsif((mpgLower.nil? == false) && (horsepowerExact.nil? == false))
+			self.search({ 
+				size: 100,
+				query: {
+					bool: {
+						must: {
+							bool: {
+								must: [
+									{
+										multi_match: {
+											query: year,
+											type: :phrase_prefix,
+											fields: [
+												"model",
+												"model._2gram",
+												"model._3gram",
+											]
+										}
+									},
+									{
+										multi_match: {
+											query: horsepowerExact,
+											type: :phrase_prefix,
+											fields: [
+												"horsepower",
+												"horsepower._2gram",
+												"horsepower._3gram"
+											]
+										}
+									},
+									{
+										range: {
+											"mpg.numeric": {
+												gte: mpgLower,
+												lte: mpgHigher,
+												boost: 2.0 
+											}   
+										}
+									} 
+								],
+								should: [],
+								must_not: []
 							}
-						}, 
-						{
-							range: {
-								horsepower: {
-									gte: horsepowerLower,
-									lte: horsepowerHigher,
-									boost: 2.0 
-								}   
+						},
+						filter: {
+							bool: {
+								must: {
+									bool: {
+										must: [],
+										should: [],
+										must_not: []
+									}
+								}
 							}
-						} 
-					]
-        }
-      }
-    }) 
+						}
+					}
+				}
+			})
+		elsif((mpgExact.nil? == false) && (horsepowerLower.nil? == false))
+			self.search({ 
+				size: 100,
+				query: {
+					bool: {
+						must: {
+							bool: {
+								must: [
+									{
+										multi_match: {
+											query: year,
+											type: :phrase_prefix,
+											fields: [
+												"model",
+												"model._2gram",
+												"model._3gram",
+											]
+										}
+									},
+									{
+										multi_match: {
+											query: mpgExact,
+											type: :phrase_prefix,
+											fields: [
+												"mpg",
+												"mpg._2gram",
+												"mpg._3gram"
+											]
+										}
+									},
+									{
+										range: {
+											"horsepower.numeric": {
+												gte: horsepowerLower,
+												lte: horsepowerHigher,
+												boost: 2.0 
+											}   
+										}
+									} 
+								],
+								should: [],
+								must_not: []
+							}
+						},
+						filter: {
+							bool: {
+								must: {
+									bool: {
+										must: [],
+										should: [],
+										must_not: []
+									}
+								}
+							}
+						}
+					}
+				}
+			})
+		elsif((mpgExact.nil? == false) && (horsepowerExact.nil? == false))
+			self.search({ 
+				size: 100,
+				query: {
+					bool: {
+						must: {
+							bool: {
+								must: [
+									{
+										multi_match: {
+											query: year,
+											type: :phrase_prefix,
+											fields: [
+												"model",
+												"model._2gram",
+												"model._3gram",
+											]
+										}
+									},
+									{
+										multi_match: {
+											query: mpgExact,
+											type: :phrase_prefix,
+											fields: [
+												"mpg",
+												"mpg._2gram",
+												"mpg._3gram"
+											]
+										}
+									},
+									{
+										multi_match: {
+											query: horsepowerExact,
+											type: :phrase_prefix,
+											fields: [
+												"horsepower",
+												"horsepower._2gram",
+												"horsepower._3gram"
+											]
+										}
+									} 
+								],
+								should: [],
+								must_not: []
+							}
+						},
+						filter: {
+							bool: {
+								must: {
+									bool: {
+										must: [],
+										should: [],
+										must_not: []
+									}
+								}
+							}
+						}
+					}
+				}
+			})
+		end
 	end
 
 	def self.noCar_yesOrigin_noYear_noMpg_noHorsepower(origin)
@@ -342,35 +712,69 @@ class CocheDato < ApplicationRecord
     }) 
 	end
 
-	def self.noCar_yesOrigin_noYear_yesMpg_noHorsepower(origin, mpgLower, mpgHigher)
-		self.search({
-      size: 100, 
-      query: {
-        bool: {
-          must: [
-						{   
-							multi_match: {
-								query: origin,
-								fields: [
-									"origin", 
-									"origin._2gram", 
-									"origin._3gram"
-								]
-							}   
-						},  
-						{
-							range: {
-								mpg: {
-									gte: mpgLower,
-									lte: mpgHigher,
-									boost: 2.0 
+	def self.noCar_yesOrigin_noYear_yesMpg_noHorsepower(origin, mpgLower = nil, mpgHigher = nil, mpgExact = nil)
+		puts "======= HERE =========="
+		if(mpgLower.nil? == false)
+			self.search({
+				size: 100, 
+				query: {
+					bool: {
+						must: [
+							{   
+								multi_match: {
+									query: origin,
+									fields: [
+										"origin", 
+										"origin._2gram", 
+										"origin._3gram"
+									]
 								}   
+							},  
+							{
+								range: {
+									mpg: {
+										gte: mpgLower,
+										lte: mpgHigher,
+										boost: 2.0 
+									}   
+								}
 							}
-						}
-					]
-        }
-      }
-    }) 
+						]
+					}
+				}
+			}) 
+		elsif(mpgExact.nil? == false)
+			self.search({
+				size: 100, 
+				query: {
+					bool: {
+						must: [
+							{   
+								multi_match: {
+									query: origin,
+									fields: [
+										"origin", 
+										"origin._2gram", 
+										"origin._3gram"
+									]
+								}   
+							},  
+							{
+								multi_match: {
+									query: mpgExact,
+									type: :bool_prefix,
+									fields: [
+										"mpg", 
+										"mpg._2gram", 
+										"mpg._3gram"
+									]
+								}
+							}
+						]
+					}
+				}
+			}) 
+		end
 	end
 
 	def self.noCar_yesOrigin_noYear_yesMpg_yesHorsepower(origin, mpgLower, mpgHigher, horsepowerLower, horsepowerHigher)
@@ -519,56 +923,98 @@ class CocheDato < ApplicationRecord
 		})
 	end
 
-	def self.noCar_yesOrigin_yesYear_yesMpg_noHorsepower(origin, year, mpgLower, mpgHigher)
-		self.search({ 
-			size: 100,
-			query: {
-				bool: {
-					must: {
-						bool: {
-							must: [
-								{
-									multi_match: {
-										query: origin,
-										type: :phrase_prefix,
-										fields: ["origin", "origin._2gram", "origin._3gram"]
+	def self.noCar_yesOrigin_yesYear_yesMpg_noHorsepower(origin, year, mpgLower = nil, mpgHigher = nil, mpgExact = nil)
+		if(mpgLower.nil? == false)
+			self.search({ 
+				size: 100,
+				query: {
+					bool: {
+						must: {
+							bool: {
+								must: [
+									{
+										multi_match: {
+											query: origin,
+											type: :phrase_prefix,
+											fields: ["origin", "origin._2gram", "origin._3gram"]
+										}
+									},
+									{
+										multi_match: {
+											query: year,
+											type: :phrase_prefix,
+											fields: ["model", "model._2gram", "model._3gram"]
+										}
+									},
+									{
+										range: {
+											"mpg.numeric": {
+												gte: mpgLower,
+												lte: mpgHigher,
+												boost: 2.0 
+											}   
+										}
 									}
-								},
-								{
-									multi_match: {
-										query: year,
-										type: :phrase_prefix,
-										fields: ["model", "model._2gram", "model._3gram"]
-									}
-								},
-								{
-									range: {
-										mpg: {
-											gte: mpgLower,
-											lte: mpgHigher,
-											boost: 2.0 
-										}   
-									}
-								}
-							],
-							should: [],
-							must_not: []
-						}
-					},
-					filter: {
-						bool: {
-							must: {
-								bool: {
-									must: [],
-									should: [],
-									must_not: []
+								],
+								should: [],
+								must_not: []
+							}
+						},
+						filter: {
+							bool: {
+								must: {
+									bool: { must: [], should: [], must_not: [] }
 								}
 							}
 						}
 					}
 				}
-			}
-		})
+			})
+		elsif(mpgExact.nil? == false)
+			self.search({ 
+				size: 100,
+				query: {
+					bool: {
+						must: {
+							bool: {
+								must: [
+									{
+										multi_match: {
+											query: origin,
+											type: :phrase_prefix,
+											fields: ["origin", "origin._2gram", "origin._3gram"]
+										}
+									},
+									{
+										multi_match: {
+											query: year,
+											type: :phrase_prefix,
+											fields: ["model", "model._2gram", "model._3gram"]
+										}
+									},
+									{
+										multi_match: {
+											query: mpgExact,
+											type: :phrase_prefix,
+											fields: ["mpg", "mpg._2gram", "mpg._3gram"]
+										}
+									}
+								],
+								should: [],
+								must_not: []
+							}
+						},
+						filter: {
+							bool: {
+								must: {
+									bool: { must: [], should: [], must_not: [] }
+								}
+							}
+						}
+					}
+				}
+			})
+		end
 	end
 
 	def self.noCar_yesOrigin_yesYear_yesMpg_yesHorsepower(origin, year, mpgLower, mpgHigher, horsepowerLower, horsepowerHigher)

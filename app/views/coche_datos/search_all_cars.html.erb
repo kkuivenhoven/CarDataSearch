@@ -16,6 +16,74 @@
 
 				<div class="row">
 					<div class="col-6">
+						<h6>Search with MPG?</h6>
+						<input class="form-check-input" type="radio" id="none_mpg" name="mpg_value" value="mpg_none" onclick="mpgRadioCheck();">
+						<label class="form-check-label" for="none">None</label><br>
+						<input class="form-check-input" type="radio" id="exact_mpg" name="mpg_value" value="mpg_exact" onclick="mpgRadioCheck();">
+						<label class="form-check-label" for="exact">Exact</label><br>
+						<input class="form-check-input" type="radio" id="range_mpg" name="mpg_value" value="mpg_range" onclick="mpgRadioCheck();">
+						<label class="form-check-label" for="range">Range</label><br>
+					</div>
+					<div class="col-6">
+						<h6>Search with Horsepower?</h6>
+						<input class="form-check-input" type="radio" id="none_horsepower" name="horsepower_value" value="horsepower_none" onclick="horsepowerRadioCheck();">
+						<label class="form-check-label" for="none">None</label><br>
+						<input class="form-check-input" type="radio" id="exact_horsepower" name="horsepower_value" value="horsepower_exact" onclick="horsepowerRadioCheck();">
+						<label class="form-check-label" for="exact">Exact</label><br>
+						<input class="form-check-input" type="radio" id="range_horsepower" name="horsepower_value" value="horsepower_range" onclick="horsepowerRadioCheck();">
+						<label class="form-check-label" for="range">Range</label><br>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6" id="mpg_exact_fields_container">
+						<span class="search_form_text">MPG - exact:</span><br>
+						<input type="number" id="MPG_exact_val" name="MPG_exact_val" class="form-control" value=""><br>
+					</div>
+
+					<div class="col-6" id="mpg_range_fields_container">
+						<span class="search_form_text">MPG (lower bound):</span>&nbsp;
+						<input type="number" id="MPG_input" name="MPG_input" min=1 max=200 class="form-control number" placerholder="0"><br>
+						<span class="search_form_text">MPG (upper bound):</span>&nbsp;
+						<input type="number" id="MPG_two_input" name="MPG_two_input" min=1 max=200 class="form-control number" placerholder="0"><br>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6" id="horsepower_exact_fields_container">
+						<span class="search_form_text">Horsepower - exact:</span><br>
+						<input type="number" id="horsepower_exact_input" name="horsepower_exact_input" min=1 max=500 class="form-control" value=""><br>
+					</div>
+
+					<div class="col-6" id="horsepower_range_fields_container">
+						<span class="search_form_text">Horsepower (lower bound):</span>&nbsp;
+						<input type="number" id="horsepower_input" name="horsepower_input" min=1 max=500 class="form-control number" placerholder="0"><br>
+						<span class="search_form_text">Horsepower (upper bound):</span>&nbsp;
+						<input type="number" id="horsepower_two_input" name="horsepower_two_input" min=1 max=500 class="form-control number" placerholder="0"><br>
+					</div>
+				</div>
+				<!--div class="row">
+					<div class="col-6">
+						<input type="checkbox" id="mpg_checkbox" name="mpg_checkbox" class="form-check-input" value="" onclick="mpgFieldsContainer();">
+						&nbsp;<span class="search_form_text">Search by MPG range?</span><br>
+					</div>
+					<div class="col-6">
+						<input type="checkbox" id="horsepower_checkbox" name="horsepower_checkbox" class="form-check-input" value="" onclick="horsepowerFieldsContainer();">
+						&nbsp;<span class="search_form_text">Search by horsepower range?</span><br>
+					</div>
+				</div-->
+
+				<!--div class="row">
+					<div class="col-6" id="mpg_fields_container">
+							<span class="search_form_text">MPG (lower bound):</span>&nbsp;
+						<input type="radio" id="exact_mpg" name="mpg_value" value="none">
+						<label for="exact">Exact</label<br>
+					</div>
+					<div class="col-6">
+						<input type="checkbox" id="horsepower_checkbox" name="horsepower_checkbox" class="form-check-input" value="" onclick="horsepowerFieldsContainer();">
+						&nbsp;<span class="search_form_text">Search by horsepower range?</span><br>
+					</div>
+				</div-->
+				<!--div class="row">
+					<div class="col-6">
 						<input type="checkbox" id="mpg_checkbox" name="mpg_checkbox" class="form-check-input" value="" onclick="mpgFieldsContainer();">
 						&nbsp;<span class="search_form_text">Search by MPG range?</span><br>
 					</div>
@@ -40,7 +108,7 @@
 							<span class="search_form_text">Horsepower (upper bound):</span>&nbsp;
 							<input type="number" id="horsepower_two_input" name="horsepower_two_input" min=50 max=500 class="form-control number" placerholder="0"><br>
 					</div>
-				</div>		
+				</div-->		
 
 			</div>
     </div>
